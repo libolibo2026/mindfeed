@@ -330,6 +330,7 @@
   </div>
 
   <script>
+    // 系列映射表（id → 中文名）
     const SERIES_MAP = [
       { id: 'A', label: '不玩手机', emoji: '📱' },
       { id: 'B', label: '人物传记', emoji: '👤' },
@@ -342,6 +343,10 @@
       { id: 'I', label: '治愈时刻', emoji: '🌅' },
       { id: 'J', label: '搞钱知识', emoji: '💰' },
     ];
+
+    // 建立 id → 领域对象的快速查找表
+    const SERIES_LOOKUP = {};
+    SERIES_MAP.forEach(s => { SERIES_LOOKUP[s.id] = s; });
 
     let selectedSeries = new Set();
 
@@ -435,6 +440,9 @@
         }
 
         area.innerHTML = data.map((item, idx) => {
+          // 根据 series_id 查对应的领域中文名
+          const seriesInfo = SERIES_LOOKUP[item.series_id] || { label: item.series_id, emoji: '📌' };
+
           let metaExtra = '';
           if (item.author) metaExtra += `<span>✍️ ${item.author}</span>`;
           if (item.publish_year) metaExtra += `<span>📅 ${item.publish_year}</span>`;
@@ -445,13 +453,13 @@
           return `
             <div class="item-card" data-series="${item.series_id}" style="animation-delay: ${idx * 0.05}s">
               <div class="meta">
-                <span class="series-id">【${item.series_id}】</span>
+                <span class="series-id">【${seriesInfo.label}】</span>
                 ${metaExtra}
               </div>
               <div class="title">${item.title}</div>
               ${item.description ? `<div class="desc">${item.description}</div>` : ''}
               <div class="tags">
-                <span>系列 ${item.series_id}</span>
+                <span>${seriesInfo.emoji} ${seriesInfo.label}</span>
                 ${item.genre ? `<span>${item.genre}</span>` : ''}
                 ${item.mood_tag && !item.genre ? `<span>${item.mood_tag}</span>` : ''}
               </div>
