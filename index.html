@@ -67,19 +67,6 @@
       color: #fbbf24;
       box-shadow: 0 0 30px rgba(251, 191, 36, 0.08);
     }
-    .series-tag .badge {
-      display: inline-block;
-      background: rgba(255,255,255,0.06);
-      border-radius: 20px;
-      padding: 0 8px;
-      font-size: 11px;
-      color: #666;
-      margin-left: 6px;
-    }
-    .series-tag.active .badge {
-      background: rgba(251, 191, 36, 0.2);
-      color: #fbbf24;
-    }
     .result-area {
       min-height: 300px;
       padding: 20px 0;
@@ -89,16 +76,6 @@
       color: #666;
       padding: 60px 0;
       font-size: 18px;
-    }
-    .loading::after {
-      content: '...';
-      animation: dots 1.2s steps(3, end) infinite;
-    }
-    @keyframes dots {
-      0% { content: ''; }
-      33% { content: '.'; }
-      66% { content: '..'; }
-      100% { content: '...'; }
     }
     .empty-state {
       text-align: center;
@@ -113,7 +90,6 @@
       padding: 18px 24px;
       margin-bottom: 12px;
       border-left: 4px solid #fbbf24;
-      transition: all 0.2s ease;
       animation: fadeUp 0.4s ease both;
     }
     .item-card:nth-child(1) { animation-delay: 0.05s; border-left-color: #fbbf24; }
@@ -131,6 +107,7 @@
       font-size: 13px;
       color: #888;
       margin-bottom: 4px;
+      flex-wrap: wrap;
     }
     .item-card .meta .series-id {
       color: #fbbf24;
@@ -144,7 +121,8 @@
     .item-card .desc {
       color: #999;
       font-size: 15px;
-      margin-top: 2px;
+      margin-top: 4px;
+      line-height: 1.5;
     }
     .item-card .tags {
       display: flex;
@@ -169,9 +147,7 @@
       border-top: 1px solid rgba(255,255,255,0.04);
       margin-top: 10px;
     }
-    .stats .count {
-      color: #fbbf24;
-    }
+    .stats .count { color: #fbbf24; }
   </style>
 </head>
 <body>
@@ -195,39 +171,35 @@
   </div>
 
   <script>
-    // ---------- 系列配置 ----------
     const SERIES_MAP = [
-      { id: 'A', label: '不玩手机', emoji: '📱', count: 10 },
-      { id: 'B', label: '人物传记', emoji: '👤', count: 10 },
-      { id: 'C', label: '创业案例', emoji: '🚀', count: 10 },
-      { id: 'D', label: '经典电影', emoji: '🎬', count: 10 },
-      { id: 'E', label: '必读书目', emoji: '📖', count: 10 },
-      { id: 'F', label: '家常菜谱', emoji: '🍳', count: 10 },
-      { id: 'G', label: '极简妙招', emoji: '🧹', count: 10 },
-      { id: 'H', label: '周末去处', emoji: '🌿', count: 10 },
-      { id: 'I', label: '治愈时刻', emoji: '🌅', count: 10 },
-      { id: 'J', label: '搞钱知识', emoji: '💰', count: 10 },
+      { id: 'A', label: '不玩手机', emoji: '📱' },
+      { id: 'B', label: '人物传记', emoji: '👤' },
+      { id: 'C', label: '创业案例', emoji: '🚀' },
+      { id: 'D', label: '经典电影', emoji: '🎬' },
+      { id: 'E', label: '必读书目', emoji: '📖' },
+      { id: 'F', label: '家常菜谱', emoji: '🍳' },
+      { id: 'G', label: '极简妙招', emoji: '🧹' },
+      { id: 'H', label: '周末去处', emoji: '🌿' },
+      { id: 'I', label: '治愈时刻', emoji: '🌅' },
+      { id: 'J', label: '搞钱知识', emoji: '💰' },
     ];
 
-    // ---------- 渲染系列标签 ----------
     function renderSeries() {
       const grid = document.getElementById('seriesGrid');
       grid.innerHTML = SERIES_MAP.map(s =>
         `<div class="series-tag" data-series="${s.id}" onclick="selectSeries('${s.id}')">
           ${s.emoji} ${s.label}
-          <span class="badge">${s.count}条</span>
         </div>`
       ).join('');
     }
 
-    // ---------- 选择系列 ----------
     async function selectSeries(seriesId) {
       document.querySelectorAll('.series-tag').forEach(el => {
         el.classList.toggle('active', el.dataset.series === seriesId);
       });
 
       const area = document.getElementById('resultArea');
-      area.innerHTML = `<div class="loading">加载中</div>`;
+      area.innerHTML = `<div class="loading">加载中...</div>`;
 
       try {
         const resp = await fetch(`/api/preview?series=${seriesId}`);
@@ -245,21 +217,41 @@
           return;
         }
 
-        area.innerHTML = data.map((item, idx) => `
-          <div class="item-card">
-            <div class="meta">
-              <span class="series-id">【${item.series_id}】</span>
-              <span>⏱ ${item.cost_time || '未知'}</span>
-              <span>#${item.mood_tag || '其他'}</span>
+        area.innerHTML = data.map(item => {
+          // 构造元信息行
+          let metaExtra = '';
+          if (item.author) {
+            metaExtra += `<span>✍️ ${item.author}</span>`;
+          }
+          if (item.publish_year) {
+            metaExtra += `<span>📅 ${item.publish_year}</span>`;
+          }
+          if (item.rating) {
+            metaExtra += `<span>⭐ ${item.rating}</span>`;
+          }
+          if (!item.author && item.cost_time) {
+            metaExtra += `<span>⏱ ${item.cost_time}</span>`;
+          }
+          if (item.mood_tag) {
+            metaExtra += `<span>#${item.mood_tag}</span>`;
+          }
+
+          return `
+            <div class="item-card">
+              <div class="meta">
+                <span class="series-id">【${item.series_id}】</span>
+                ${metaExtra}
+              </div>
+              <div class="title">${item.title}</div>
+              ${item.description ? `<div class="desc">${item.description}</div>` : ''}
+              <div class="tags">
+                <span>系列 ${item.series_id}</span>
+                ${item.genre ? `<span>${item.genre}</span>` : ''}
+                ${item.mood_tag && !item.genre ? `<span>${item.mood_tag}</span>` : ''}
+              </div>
             </div>
-            <div class="title">${item.title}</div>
-            ${item.description ? `<div class="desc">${item.description}</div>` : ''}
-            <div class="tags">
-              <span>系列 ${item.series_id}</span>
-              ${item.mood_tag ? `<span>${item.mood_tag}</span>` : ''}
-            </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
 
         document.getElementById('resultCount').textContent = `${data.length} 条内容`;
 
@@ -268,36 +260,18 @@
           <div class="empty-state">
             <div class="icon">⚠️</div>
             <div>加载失败: ${err.message}</div>
-            <div style="font-size:14px;color:#444;margin-top:8px;">请刷新页面重试</div>
           </div>
         `;
         console.error('预览加载失败:', err);
       }
     }
 
-    // ---------- 数据初始化检测 ----------
-    async function checkAndInitData() {
-      try {
-        const resp = await fetch('/init');
-        const data = await resp.json();
-        console.log('📊 数据状态:', data.message || data);
-      } catch (err) {
-        console.warn('数据检测失败:', err);
-      }
-    }
-
-    // ---------- 初始化 ----------
     renderSeries();
-
-    // 默认选中第一个系列并加载
     setTimeout(() => {
       const first = SERIES_MAP[0].id;
       document.querySelector(`.series-tag[data-series="${first}"]`)?.classList.add('active');
       selectSeries(first);
     }, 100);
-
-    // 延迟检测数据初始化状态
-    setTimeout(checkAndInitData, 500);
   </script>
 </body>
 </html>
