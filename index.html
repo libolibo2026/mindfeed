@@ -125,7 +125,7 @@
       user-select: none;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
     .series-tag:hover {
       background: rgba(255,255,255,0.1);
@@ -138,13 +138,36 @@
       color: #fbbf24;
       box-shadow: 0 0 24px rgba(251, 191, 36, 0.15);
     }
-    .series-tag .check {
-      display: none;
-      font-size: 12px;
-      font-weight: 700;
+
+    /* ========== 方框勾选样式 ========== */
+    .series-tag .checkbox {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+      position: relative;
     }
-    .series-tag.active .check {
-      display: inline;
+    .series-tag:hover .checkbox {
+      border-color: rgba(255,255,255,0.7);
+    }
+    .series-tag.active .checkbox {
+      background: #fbbf24;
+      border-color: #fbbf24;
+      box-shadow: 0 0 12px rgba(251, 191, 36, 0.5);
+    }
+    .series-tag.active .checkbox::after {
+      content: '';
+      width: 4px;
+      height: 8px;
+      border: solid #0f0c29;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg) translate(-1px, -1px);
+      margin-top: -2px;
     }
 
     /* ========== 内容区 ========== */
@@ -352,7 +375,6 @@
     let selectedSeries = new Set();
 
     // ===== 去重历史 =====
-    // 记录最近看过的内容 id，请求时传给后端排除，避免每次重复
     const MAX_HISTORY = 50;
     let seenIds = [];
 
@@ -361,7 +383,6 @@
         if (id == null) return;
         if (!seenIds.includes(id)) seenIds.push(id);
       });
-      // 超长裁剪，保留最近的 MAX_HISTORY 条
       if (seenIds.length > MAX_HISTORY) {
         seenIds = seenIds.slice(-MAX_HISTORY);
       }
@@ -380,7 +401,7 @@
       const grid = document.getElementById('seriesGrid');
       grid.innerHTML = SERIES_MAP.map(s =>
         `<div class="series-tag" data-series="${s.id}" onclick="toggleSeries('${s.id}')">
-          <span class="check">✓</span>
+          <span class="checkbox"></span>
           ${s.emoji} ${s.label}
         </div>`
       ).join('');
@@ -451,7 +472,6 @@
       try {
         const seriesList = Array.from(selectedSeries).join(',');
 
-        // 组装请求参数，把已看过的 id 传给后端排除
         const params = new URLSearchParams();
         params.set('series', seriesList);
         if (seenIds.length > 0) {
@@ -475,7 +495,6 @@
           return;
         }
 
-        // 把本次返回的 id 记入历史
         pushSeenIds(data.map(item => item.id));
 
         area.innerHTML = data.map((item, idx) => {
@@ -522,11 +541,8 @@
     }
 
     renderSeries();
-    setTimeout(() => {
-      selectedSeries.add('A');
-      updateUI();
-      loadContent();
-    }, 100);
+    // 不再默认选中 A，进入页面保持干净状态
+    updateUI();
   </script>
 </body>
 </html>
