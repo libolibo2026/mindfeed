@@ -15,7 +15,7 @@ export async function onRequest(context) {
   try {
     // 查询该系列 5 条未推送的内容
     let stmt = env.DB.prepare(
-      `SELECT series_id, title, description, mood_tag, cost_time 
+      `SELECT series_id, title, description, mood_tag, cost_time, author, rating, publish_year, genre
        FROM content_library 
        WHERE series_id = ? AND pushed = 0 
        ORDER BY RANDOM() 
@@ -28,7 +28,7 @@ export async function onRequest(context) {
     if (items.length < 5) {
       const need = 5 - items.length;
       const fallbackStmt = env.DB.prepare(
-        `SELECT series_id, title, description, mood_tag, cost_time 
+        `SELECT series_id, title, description, mood_tag, cost_time, author, rating, publish_year, genre
          FROM content_library 
          WHERE series_id = ? 
          ORDER BY RANDOM() 
@@ -42,7 +42,7 @@ export async function onRequest(context) {
     if (items.length < 5) {
       const need = 5 - items.length;
       const extraStmt = env.DB.prepare(
-        `SELECT series_id, title, description, mood_tag, cost_time 
+        `SELECT series_id, title, description, mood_tag, cost_time, author, rating, publish_year, genre
          FROM content_library 
          ORDER BY RANDOM() 
          LIMIT ?`
