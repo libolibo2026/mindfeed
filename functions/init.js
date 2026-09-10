@@ -1,10 +1,11 @@
 // functions/init.js
 // 访问 /init 触发数据初始化（部署后只需访问一次）
 
-// ======================= 原有 100 条数据 =======================
+// ======================= 所有数据（严格统一格式，按 A→J 顺序） =======================
 const SEED_DATA = [
-  // 系列 A：不玩手机的1000件小事
-  // 系列 A：不玩手机的1000件小事
+  // ============================================================
+  // 区块 1: A (不玩手机的1000件小事)
+  // ============================================================
   { series_id: 'A', title: '去天台听一次邻居家的吵架声', desc: '感受人间烟火', mood: '治愈', cost: '10分钟' },
   { series_id: 'A', title: '用树叶拼一幅画', desc: '自然创作', mood: '治愈', cost: '20分钟' },
   { series_id: 'A', title: '写一封手写信给老朋友', desc: '重温旧情', mood: '温情', cost: '30分钟' },
@@ -190,7 +191,10 @@ const SEED_DATA = [
   { series_id: 'A', title: '去郊外采摘当季水果', desc: '亲近自然，享受丰收喜悦', mood: '开心', cost: '半天' },
   { series_id: 'A', title: '逛独立设计品牌店', desc: '发现小众好物，提升品味', mood: '充实', cost: '1小时' },
   { series_id: 'A', title: '体验潜水或浮潜（室内也可）', desc: '探索水下世界，奇妙体验', mood: '充满活力', cost: '半天' },
-  // 系列 B：改变人生的1000个传记
+
+  // ============================================================
+  // 区块 2: B (改变人生的1000个传记)
+  // ============================================================
   { series_id: 'B', title: '褚时健：从烟王到橙王', desc: '永不放弃', mood: '励志', cost: '15分钟' },
   { series_id: 'B', title: '玛丽·居里：两获诺奖', desc: '女性力量', mood: '励志', cost: '15分钟' },
   { series_id: 'B', title: '林肯：从失落到总统', desc: '坚韧不拔', mood: '励志', cost: '15分钟' },
@@ -201,7 +205,10 @@ const SEED_DATA = [
   { series_id: 'B', title: '埃隆·马斯克：疯狂梦想家', desc: '未来视角', mood: '搞钱', cost: '15分钟' },
   { series_id: 'B', title: '海伦·凯勒：假如给我三天光明', desc: '生命奇迹', mood: '励志', cost: '15分钟' },
   { series_id: 'B', title: '达芬奇：跨界天才', desc: '好奇心', mood: '文艺', cost: '15分钟' },
-  // 系列 C：从0到1的1000个创业经
+
+  // ============================================================
+  // 区块 3: C (从0到1的1000个创业经)
+  // ============================================================
   { series_id: 'C', title: '摆摊卖手冲咖啡', desc: '低成本创业', mood: '搞钱', cost: '10分钟' },
   { series_id: 'C', title: '小红书宠物博主', desc: '内容变现', mood: '搞钱', cost: '10分钟' },
   { series_id: 'C', title: '家庭烘焙私房', desc: '美食创业', mood: '搞钱', cost: '10分钟' },
@@ -212,7 +219,10 @@ const SEED_DATA = [
   { series_id: 'C', title: '摄影约拍', desc: '技能变现', mood: '搞钱', cost: '10分钟' },
   { series_id: 'C', title: '课程分销', desc: '副业项目', mood: '搞钱', cost: '10分钟' },
   { series_id: 'C', title: '公众号流量主', desc: '文字变现', mood: '搞钱', cost: '10分钟' },
-  // 系列 D：看完格局打开的1000部电影
+
+  // ============================================================
+  // 区块 4: D (看完格局打开的1000部电影)
+  // ============================================================
   { series_id: 'D', title: '肖申克的救赎', desc: '希望与自由', mood: '深思', cost: '2小时' },
   { series_id: 'D', title: '教父', desc: '家族与权力', mood: '搞钱', cost: '2.5小时' },
   { series_id: 'D', title: '阿甘正传', desc: '傻人有傻福', mood: '治愈', cost: '2小时' },
@@ -223,18 +233,180 @@ const SEED_DATA = [
   { series_id: 'D', title: '这个杀手不太冷', desc: '温暖救赎', mood: '治愈', cost: '1.5小时' },
   { series_id: 'D', title: '海上钢琴师', desc: '孤独与选择', mood: '文艺', cost: '2小时' },
   { series_id: 'D', title: '三傻大闹宝莱坞', desc: '教育反思', mood: '启发', cost: '2.5小时' },
-  // 系列 E：值得反复读的1000本书
-  { series_id: 'E', title: '活着', desc: '生命的坚韧', mood: '深思', cost: '3小时' },
-  { series_id: 'E', title: '小王子', desc: '纯真与爱', mood: '治愈', cost: '1小时' },
-  { series_id: 'E', title: '百年孤独', desc: '魔幻现实', mood: '文艺', cost: '5小时' },
-  { series_id: 'E', title: '人类简史', desc: '认知革命', mood: '搞钱', cost: '4小时' },
-  { series_id: 'E', title: '学会提问', desc: '批判思维', mood: '搞钱', cost: '2小时' },
-  { series_id: 'E', title: '解忧杂货店', desc: '温情推理', mood: '治愈', cost: '2小时' },
-  { series_id: 'E', title: '追风筝的人', desc: '救赎与友谊', mood: '深思', cost: '3小时' },
-  { series_id: 'E', title: '乌合之众', desc: '大众心理', mood: '搞钱', cost: '2小时' },
-  { series_id: 'E', title: '平凡的世界', desc: '奋斗人生', mood: '励志', cost: '6小时' },
-  { series_id: 'E', title: '瓦尔登湖', desc: '极简生活', mood: '治愈', cost: '3小时' },
-  // 系列 F：吃遍全国的1000道家常菜
+
+  // ============================================================
+  // 区块 5: E (值得反复读的1000本书 - 已统一格式)
+  // ============================================================
+  // ========== 文学 ==========
+  { series_id: 'E', title: '百年孤独', desc: '魔幻现实主义巅峰之作，讲述了布恩迪亚家族七代人的传奇故事，马孔多小镇的兴衰史映射了整个拉美大陆的百年变迁。', mood: '文学', cost: '📖 阅读', author: '加西亚·马尔克斯', rating: '9.3', publish_year: '1967年', genre: '文学' },
+  { series_id: 'E', title: '三体', desc: '中国科幻文学的里程碑之作，从文革时期的红岸基地出发，揭示了宇宙文明间的黑暗森林法则。', mood: '文学', cost: '📖 阅读', author: '刘慈欣', rating: '8.9', publish_year: '2008年', genre: '文学' },
+  { series_id: 'E', title: '围城', desc: '一部充满智慧与幽默的讽刺杰作，深刻揭示了现代知识分子的精神困境。', mood: '文学', cost: '📖 阅读', author: '钱钟书', rating: '9.0', publish_year: '1947年', genre: '文学' },
+  { series_id: 'E', title: '边城', desc: '中国现代文学中最纯净的田园牧歌，湘西茶峒小镇上少女翠翠的爱情故事。', mood: '文学', cost: '📖 阅读', author: '沈从文', rating: '8.7', publish_year: '1934年', genre: '文学' },
+  { series_id: 'E', title: '白鹿原', desc: '渭河平原上白、鹿两家的恩怨纠葛，浓缩了中国近现代半个多世纪的历史变迁。', mood: '文学', cost: '📖 阅读', author: '陈忠实', rating: '9.2', publish_year: '1993年', genre: '文学' },
+  { series_id: 'E', title: '尘埃落定', desc: '通过土司家族"傻子"少爷的视角，讲述了藏族土司制度的兴衰与消亡。', mood: '文学', cost: '📖 阅读', author: '阿来', rating: '8.9', publish_year: '1998年', genre: '文学' },
+  { series_id: 'E', title: '黄金时代', desc: '以知青岁月为背景，展现了荒诞年代里对自由与真实的执着追求。', mood: '文学', cost: '📖 阅读', author: '王小波', rating: '8.9', publish_year: '1994年', genre: '文学' },
+  { series_id: 'E', title: '白夜行', desc: '东野圭吾的巅峰之作，一段令人窒息的爱与罪。', mood: '文学', cost: '📖 阅读', author: '东野圭吾', rating: '9.2', publish_year: '1999年', genre: '文学' },
+  { series_id: 'E', title: '嫌疑人X的献身', desc: '将爱情与推理完美融合，最纯粹的爱可以让人献出一切。', mood: '文学', cost: '📖 阅读', author: '东野圭吾', rating: '9.0', publish_year: '2005年', genre: '文学' },
+  { series_id: 'E', title: '1984', desc: '反乌托邦文学的经典之作，对权力、真理与自由的思考至今仍有强烈的现实意义。', mood: '文学', cost: '📖 阅读', author: '乔治·奥威尔', rating: '9.4', publish_year: '1949年', genre: '文学' },
+  { series_id: 'E', title: '动物农场', desc: '一部用动物寓言写成的政治讽刺经典。', mood: '文学', cost: '📖 阅读', author: '乔治·奥威尔', rating: '9.3', publish_year: '1945年', genre: '文学' },
+  { series_id: 'E', title: '局外人', desc: '存在主义文学的奠基之作，揭示了社会对"不合规矩"之人的排斥与审判。', mood: '文学', cost: '📖 阅读', author: '加缪', rating: '9.1', publish_year: '1942年', genre: '文学' },
+  { series_id: 'E', title: '鼠疫', desc: '一部关于疫情下人性与反抗的哲理小说。', mood: '文学', cost: '📖 阅读', author: '加缪', rating: '8.9', publish_year: '1947年', genre: '文学' },
+  { series_id: 'E', title: '灿烂千阳', desc: '通过阿富汗两位女性的故事，展现了战争阴影下女性的苦难与坚韧。', mood: '文学', cost: '📖 阅读', author: '卡勒德·胡赛尼', rating: '8.8', publish_year: '2007年', genre: '文学' },
+  { series_id: 'E', title: '挪威的森林', desc: '村上春树最畅销的纯爱小说，一段关于青春、爱情与死亡的忧伤记忆。', mood: '文学', cost: '📖 阅读', author: '村上春树', rating: '8.7', publish_year: '1987年', genre: '文学' },
+  { series_id: 'E', title: '海边的卡夫卡', desc: '一部充满隐喻与奇幻色彩的成长小说。', mood: '文学', cost: '📖 阅读', author: '村上春树', rating: '8.5', publish_year: '2002年', genre: '文学' },
+  { series_id: 'E', title: '魔戒', desc: '现代奇幻文学的奠基之作。', mood: '文学', cost: '📖 阅读', author: '托尔金', rating: '9.0', publish_year: '1954年', genre: '文学' },
+  { series_id: 'E', title: '傲慢与偏见', desc: '英国文学史上最受欢迎的爱情小说之一。', mood: '文学', cost: '📖 阅读', author: '简·奥斯汀', rating: '9.0', publish_year: '1813年', genre: '文学' },
+  { series_id: 'E', title: '简爱', desc: '一部追求女性独立与尊严的经典之作。', mood: '文学', cost: '📖 阅读', author: '夏洛蒂·勃朗特', rating: '8.7', publish_year: '1847年', genre: '文学' },
+  { series_id: 'E', title: '呼啸山庄', desc: '一部充满暴力与激情的哥特式爱情悲剧。', mood: '文学', cost: '📖 阅读', author: '艾米莉·勃朗特', rating: '8.8', publish_year: '1847年', genre: '文学' },
+  { series_id: 'E', title: '悲惨世界', desc: '法国文学史上最宏大的社会画卷之一。', mood: '文学', cost: '📖 阅读', author: '雨果', rating: '9.1', publish_year: '1862年', genre: '文学' },
+  { series_id: 'E', title: '战争与和平', desc: '文学史上最伟大的小说之一。', mood: '文学', cost: '📖 阅读', author: '托尔斯泰', rating: '9.5', publish_year: '1869年', genre: '文学' },
+  { series_id: 'E', title: '安娜·卡列尼娜', desc: '探讨爱情、婚姻与社会道德的巨著。', mood: '文学', cost: '📖 阅读', author: '托尔斯泰', rating: '9.3', publish_year: '1877年', genre: '文学' },
+  { series_id: 'E', title: '罪与罚', desc: '深入探讨人性、罪恶与救赎的心理小说巅峰。', mood: '文学', cost: '📖 阅读', author: '陀思妥耶夫斯基', rating: '9.2', publish_year: '1866年', genre: '文学' },
+  { series_id: 'E', title: '卡拉马佐夫兄弟', desc: '陀思妥耶夫斯基最后的巅峰之作。', mood: '文学', cost: '📖 阅读', author: '陀思妥耶夫斯基', rating: '9.4', publish_year: '1880年', genre: '文学' },
+  { series_id: 'E', title: '大师与玛格丽特', desc: '将魔幻与现实完美融合的讽刺杰作。', mood: '文学', cost: '📖 阅读', author: '布尔加科夫', rating: '9.1', publish_year: '1967年', genre: '文学' },
+  { series_id: 'E', title: '红与黑', desc: '法国现实主义文学的开山之作。', mood: '文学', cost: '📖 阅读', author: '司汤达', rating: '8.9', publish_year: '1830年', genre: '文学' },
+  { series_id: 'E', title: '飘', desc: '美国文学史上最受欢迎的小说之一。', mood: '文学', cost: '📖 阅读', author: '玛格丽特·米切尔', rating: '9.3', publish_year: '1936年', genre: '文学' },
+  { series_id: 'E', title: '老人与海', desc: '海明威最具代表性的作品，展现了人类不屈不挠的精神力量。', mood: '文学', cost: '📖 阅读', author: '海明威', rating: '8.5', publish_year: '1952年', genre: '文学' },
+  { series_id: 'E', title: '基督山伯爵', desc: '一部关于复仇与正义的经典通俗小说。', mood: '文学', cost: '📖 阅读', author: '大仲马', rating: '9.0', publish_year: '1844年', genre: '文学' },
+  { series_id: 'E', title: '骆驼祥子', desc: '北平车夫祥子三次买车三次失去的悲剧人生。', mood: '文学', cost: '📖 阅读', author: '老舍', rating: '8.8', publish_year: '1936年', genre: '文学' },
+  { series_id: 'E', title: '四世同堂', desc: '一部描写抗战时期北平市民生活的长篇巨著。', mood: '文学', cost: '📖 阅读', author: '老舍', rating: '8.9', publish_year: '1949年', genre: '文学' },
+  { series_id: 'E', title: '寒夜', desc: '巴金最后的长篇小说，也是一部深刻的社会悲剧。', mood: '文学', cost: '📖 阅读', author: '巴金', rating: '8.1', publish_year: '1947年', genre: '文学' },
+  { series_id: 'E', title: '家', desc: '巴金代表作《激流三部曲》之首。', mood: '文学', cost: '📖 阅读', author: '巴金', rating: '8.4', publish_year: '1931年', genre: '文学' },
+  { series_id: 'E', title: '呐喊', desc: '中国现代小说的奠基之作。', mood: '文学', cost: '📖 阅读', author: '鲁迅', rating: '9.2', publish_year: '1923年', genre: '文学' },
+  { series_id: 'E', title: '彷徨', desc: '鲁迅第二部小说集。', mood: '文学', cost: '📖 阅读', author: '鲁迅', rating: '8.9', publish_year: '1926年', genre: '文学' },
+  { series_id: 'E', title: '天龙八部', desc: '金庸武侠巅峰之作。', mood: '文学', cost: '📖 阅读', author: '金庸', rating: '9.2', publish_year: '1963年', genre: '文学' },
+  { series_id: 'E', title: '射雕英雄传', desc: '金庸武侠经典，郭靖黄蓉的爱情与成长。', mood: '文学', cost: '📖 阅读', author: '金庸', rating: '9.0', publish_year: '1957年', genre: '文学' },
+  { series_id: 'E', title: '活着', desc: '生命的坚韧。', mood: '文学', cost: '📖 阅读', author: '余华', rating: '9.4', publish_year: '1993年', genre: '文学' },
+  { series_id: 'E', title: '小王子', desc: '纯真与爱。', mood: '文学', cost: '📖 阅读', author: '圣埃克苏佩里', rating: '9.1', publish_year: '1943年', genre: '文学' },
+  { series_id: 'E', title: '解忧杂货店', desc: '温情推理。', mood: '文学', cost: '📖 阅读', author: '东野圭吾', rating: '8.5', publish_year: '2012年', genre: '文学' },
+  { series_id: 'E', title: '追风筝的人', desc: '救赎与友谊。', mood: '文学', cost: '📖 阅读', author: '卡勒德·胡赛尼', rating: '8.9', publish_year: '2003年', genre: '文学' },
+  { series_id: 'E', title: '平凡的世界', desc: '奋斗人生。', mood: '文学', cost: '📖 阅读', author: '路遥', rating: '9.0', publish_year: '1986年', genre: '文学' },
+  { series_id: 'E', title: '瓦尔登湖', desc: '极简生活。', mood: '文学', cost: '📖 阅读', author: '梭罗', rating: '8.4', publish_year: '1854年', genre: '文学' },
+
+  // ========== 科幻 ==========
+  { series_id: 'E', title: '三体2：黑暗森林', desc: '提出了震撼人心的"黑暗森林"宇宙社会学理论。', mood: '科幻', cost: '📖 阅读', author: '刘慈欣', rating: '9.3', publish_year: '2008年', genre: '科幻' },
+  { series_id: 'E', title: '三体3：死神永生', desc: '将科幻文学的格局推向了前所未有的高度。', mood: '科幻', cost: '📖 阅读', author: '刘慈欣', rating: '9.2', publish_year: '2010年', genre: '科幻' },
+  { series_id: 'E', title: '球状闪电', desc: '刘慈欣的早期科幻杰作。', mood: '科幻', cost: '📖 阅读', author: '刘慈欣', rating: '8.5', publish_year: '2005年', genre: '科幻' },
+  { series_id: 'E', title: '流浪地球', desc: '人类带着地球一起逃离太阳系，踏上星际流浪。', mood: '科幻', cost: '📖 阅读', author: '刘慈欣', rating: '8.6', publish_year: '2000年', genre: '科幻' },
+  { series_id: 'E', title: '银河帝国：基地', desc: '心理史学家谢顿预见了银河帝国的衰亡。', mood: '科幻', cost: '📖 阅读', author: '艾萨克·阿西莫夫', rating: '9.1', publish_year: '1951年', genre: '科幻' },
+  { series_id: 'E', title: '沙丘', desc: '科幻史上的里程碑之作，宏大的宇宙史诗。', mood: '科幻', cost: '📖 阅读', author: '弗兰克·赫伯特', rating: '8.7', publish_year: '1965年', genre: '科幻' },
+  { series_id: 'E', title: '海伯利安', desc: '一部融合了诗歌、宗教与硬核科幻的巨著。', mood: '科幻', cost: '📖 阅读', author: '丹·西蒙斯', rating: '8.8', publish_year: '1989年', genre: '科幻' },
+  { series_id: 'E', title: '安德的游戏', desc: '天才少年安德的成长故事。', mood: '科幻', cost: '📖 阅读', author: '奥森·斯科特·卡德', rating: '8.7', publish_year: '1985年', genre: '科幻' },
+  { series_id: 'E', title: '沙丘救世主', desc: '《沙丘》续集，保罗·厄崔迪成为皇帝后面临的危机。', mood: '科幻', cost: '📖 阅读', author: '弗兰克·赫伯特', rating: '8.2', publish_year: '1969年', genre: '科幻' },
+  { series_id: 'E', title: '沙丘之子', desc: '沙丘系列第三部。', mood: '科幻', cost: '📖 阅读', author: '弗兰克·赫伯特', rating: '8.3', publish_year: '1976年', genre: '科幻' },
+  { series_id: 'E', title: '基地与帝国', desc: '基地系列第二部。', mood: '科幻', cost: '📖 阅读', author: '艾萨克·阿西莫夫', rating: '8.8', publish_year: '1952年', genre: '科幻' },
+  { series_id: 'E', title: '第二基地', desc: '基地三部曲终结篇。', mood: '科幻', cost: '📖 阅读', author: '艾萨克·阿西莫夫', rating: '8.9', publish_year: '1953年', genre: '科幻' },
+  { series_id: 'E', title: '银河系搭车客指南', desc: '一部充满英式幽默的科幻喜剧。', mood: '科幻', cost: '📖 阅读', author: '道格拉斯·亚当斯', rating: '8.6', publish_year: '1979年', genre: '科幻' },
+  { series_id: 'E', title: '神经漫游者', desc: '赛博朋克流派的奠基之作。', mood: '科幻', cost: '📖 阅读', author: '威廉·吉布森', rating: '8.4', publish_year: '1984年', genre: '科幻' },
+  { series_id: 'E', title: '仿生人会梦见电子羊吗？', desc: '《银翼杀手》的原著小说。', mood: '科幻', cost: '📖 阅读', author: '菲利普·迪克', rating: '8.3', publish_year: '1968年', genre: '科幻' },
+  { series_id: 'E', title: '尤比克', desc: '在死亡与冷冻复苏的未来世界中，现实与幻觉交织。', mood: '科幻', cost: '📖 阅读', author: '菲利普·迪克', rating: '8.1', publish_year: '1969年', genre: '科幻' },
+  { series_id: 'E', title: '高堡奇人', desc: '假设轴心国赢得二战。', mood: '科幻', cost: '📖 阅读', author: '菲利普·迪克', rating: '8.2', publish_year: '1962年', genre: '科幻' },
+  { series_id: 'E', title: '时间机器', desc: '科幻文学的经典开山之作。', mood: '科幻', cost: '📖 阅读', author: 'H.G.威尔斯', rating: '8.2', publish_year: '1895年', genre: '科幻' },
+  { series_id: 'E', title: '世界大战', desc: '火星人入侵地球的经典故事。', mood: '科幻', cost: '📖 阅读', author: 'H.G.威尔斯', rating: '8.1', publish_year: '1898年', genre: '科幻' },
+  { series_id: 'E', title: '童年的终结', desc: '外星人降临地球帮助人类实现和平。', mood: '科幻', cost: '📖 阅读', author: '阿瑟·克拉克', rating: '8.3', publish_year: '1953年', genre: '科幻' },
+
+  // ========== 历史 ==========
+  { series_id: 'E', title: '史记', desc: '中国历史上最伟大的史学著作。', mood: '历史', cost: '📖 阅读', author: '司马迁', rating: '9.2', publish_year: '公元前1世纪', genre: '历史' },
+  { series_id: 'E', title: '资治通鉴', desc: '中国历史上规模最大的编年体通史。', mood: '历史', cost: '📖 阅读', author: '司马光', rating: '9.0', publish_year: '1084年', genre: '历史' },
+  { series_id: 'E', title: '人类简史', desc: '认知革命。', mood: '历史', cost: '📖 阅读', author: '尤瓦尔·赫拉利', rating: '9.1', publish_year: '2012年', genre: '历史' },
+  { series_id: 'E', title: '未来简史', desc: '探讨了在21世纪，人类将如何追求"永生、幸福、神性"。', mood: '历史', cost: '📖 阅读', author: '尤瓦尔·赫拉利', rating: '8.4', publish_year: '2015年', genre: '历史' },
+  { series_id: 'E', title: '枪炮、病菌与钢铁', desc: '一部解释人类社会发展不平等根源的宏大著作。', mood: '历史', cost: '📖 阅读', author: '贾雷德·戴蒙德', rating: '8.9', publish_year: '1997年', genre: '历史' },
+  { series_id: 'E', title: '万历十五年', desc: '一部改变中国人历史观的名著。', mood: '历史', cost: '📖 阅读', author: '黄仁宇', rating: '8.5', publish_year: '1982年', genre: '历史' },
+  { series_id: 'E', title: '中国大历史', desc: '以宏观的视野审视中国历史。', mood: '历史', cost: '📖 阅读', author: '黄仁宇', rating: '8.0', publish_year: '1991年', genre: '历史' },
+  { series_id: 'E', title: '全球通史', desc: '一部打破欧洲中心论的世界史经典。', mood: '历史', cost: '📖 阅读', author: '斯塔夫里阿诺斯', rating: '8.7', publish_year: '1970年', genre: '历史' },
+  { series_id: 'E', title: '中国近代史', desc: '一部简洁而深刻的近代史著作。', mood: '历史', cost: '📖 阅读', author: '蒋廷黻', rating: '8.6', publish_year: '1938年', genre: '历史' },
+  { series_id: 'E', title: '剑桥中国史', desc: '西方学术界最具权威的中国通史之一。', mood: '历史', cost: '📖 阅读', author: '费正清等', rating: '8.8', publish_year: '1978年', genre: '历史' },
+  { series_id: 'E', title: '丝绸之路', desc: '一部从全球视角重新解读世界史的著作。', mood: '历史', cost: '📖 阅读', author: '彼得·弗兰科潘', rating: '8.2', publish_year: '2015年', genre: '历史' },
+  { series_id: 'E', title: '大国的兴衰', desc: '一部关于国际政治经济格局的经典之作。', mood: '历史', cost: '📖 阅读', author: '保罗·肯尼迪', rating: '8.1', publish_year: '1987年', genre: '历史' },
+  { series_id: 'E', title: '罗马帝国衰亡史', desc: '西方史学史上的不朽巨著。', mood: '历史', cost: '📖 阅读', author: '爱德华·吉本', rating: '8.7', publish_year: '1776年', genre: '历史' },
+  { series_id: 'E', title: '法国大革命讲稿', desc: '深入分析了法国大革命的起因、过程及其影响。', mood: '历史', cost: '📖 阅读', author: '阿克顿勋爵', rating: '8.0', publish_year: '1900年', genre: '历史' },
+  { series_id: 'E', title: '历史研究', desc: '汤因比文明史观的代表作。', mood: '历史', cost: '📖 阅读', author: '汤因比', rating: '8.3', publish_year: '1934年', genre: '历史' },
+  { series_id: 'E', title: '叫魂', desc: '以1768年叫魂妖术大恐慌为切入点。', mood: '历史', cost: '📖 阅读', author: '孔飞力', rating: '8.9', publish_year: '1990年', genre: '历史' },
+  { series_id: 'E', title: '乌合之众', desc: '大众心理。', mood: '历史', cost: '📖 阅读', author: '古斯塔夫·勒庞', rating: '8.3', publish_year: '1895年', genre: '历史' },
+
+  // ========== 经济 ==========
+  { series_id: 'E', title: '穷查理宝典', desc: '投资大师查理·芒格智慧箴言的集大成之作。', mood: '经济', cost: '📖 阅读', author: '查理·芒格', rating: '8.9', publish_year: '2005年', genre: '经济' },
+  { series_id: 'E', title: '聪明的投资者', desc: '价值投资的开山之作。', mood: '经济', cost: '📖 阅读', author: '本杰明·格雷厄姆', rating: '8.8', publish_year: '1949年', genre: '经济' },
+  { series_id: 'E', title: '国富论', desc: '现代经济学的奠基之作。', mood: '经济', cost: '📖 阅读', author: '亚当·斯密', rating: '8.5', publish_year: '1776年', genre: '经济' },
+  { series_id: 'E', title: '经济学原理', desc: '全球最受欢迎的经济学入门教材。', mood: '经济', cost: '📖 阅读', author: '曼昆', rating: '8.4', publish_year: '1998年', genre: '经济' },
+  { series_id: 'E', title: '黑天鹅', desc: '一部关于不确定性、风险与随机性的经典著作。', mood: '经济', cost: '📖 阅读', author: '纳西姆·塔勒布', rating: '8.2', publish_year: '2007年', genre: '经济' },
+  { series_id: 'E', title: '反脆弱', desc: '提出了"反脆弱"这一全新概念。', mood: '经济', cost: '📖 阅读', author: '纳西姆·塔勒布', rating: '8.1', publish_year: '2012年', genre: '经济' },
+  { series_id: 'E', title: '原则', desc: '桥水基金创始人瑞·达利欧的人生与工作原则总结。', mood: '经济', cost: '📖 阅读', author: '瑞·达利欧', rating: '8.4', publish_year: '2017年', genre: '经济' },
+  { series_id: 'E', title: '创新者的窘境', desc: '提出了"颠覆性创新"理论。', mood: '经济', cost: '📖 阅读', author: '克莱顿·克里斯坦森', rating: '8.6', publish_year: '1997年', genre: '经济' },
+  { series_id: 'E', title: '从优秀到卓越', desc: '总结了从"优秀"到"卓越"的关键要素。', mood: '经济', cost: '📖 阅读', author: '吉姆·柯林斯', rating: '8.3', publish_year: '2001年', genre: '经济' },
+  { series_id: 'E', title: '高效能人士的七个习惯', desc: '一部影响无数人的个人成长经典。', mood: '经济', cost: '📖 阅读', author: '史蒂芬·柯维', rating: '8.6', publish_year: '1989年', genre: '经济' },
+  { series_id: 'E', title: '影响力', desc: '揭示了六大影响力原则。', mood: '经济', cost: '📖 阅读', author: '罗伯特·西奥迪尼', rating: '8.6', publish_year: '1984年', genre: '经济' },
+  { series_id: 'E', title: '思考，快与慢', desc: '诺贝尔经济学奖得主卡尼曼的代表作。', mood: '经济', cost: '📖 阅读', author: '丹尼尔·卡尼曼', rating: '8.5', publish_year: '2011年', genre: '经济' },
+  { series_id: 'E', title: '穷爸爸富爸爸', desc: '一部改变无数人理财观念的畅销书。', mood: '经济', cost: '📖 阅读', author: '罗伯特·清崎', rating: '8.2', publish_year: '1997年', genre: '经济' },
+  { series_id: 'E', title: '小狗钱钱', desc: '一本写给儿童的理财启蒙书。', mood: '经济', cost: '📖 阅读', author: '博多·舍费尔', rating: '8.6', publish_year: '1999年', genre: '经济' },
+  { series_id: 'E', title: '投资中最简单的事', desc: '中国知名基金经理邱国鹭的投资心得。', mood: '经济', cost: '📖 阅读', author: '邱国鹭', rating: '8.4', publish_year: '2014年', genre: '经济' },
+  { series_id: 'E', title: '学会提问', desc: '批判思维。', mood: '经济', cost: '📖 阅读', author: '尼尔·布朗', rating: '8.6', publish_year: '2012年', genre: '经济' },
+
+  // ========== 哲学 ==========
+  { series_id: 'E', title: '西方哲学史', desc: '诺贝尔文学奖得主罗素的哲学史经典。', mood: '哲学', cost: '📖 阅读', author: '罗素', rating: '8.5', publish_year: '1945年', genre: '哲学' },
+  { series_id: 'E', title: '中国哲学简史', desc: '中国哲学入门的最佳选择。', mood: '哲学', cost: '📖 阅读', author: '冯友兰', rating: '8.8', publish_year: '1948年', genre: '哲学' },
+  { series_id: 'E', title: '论语', desc: '儒家思想的奠基之作。', mood: '哲学', cost: '📖 阅读', author: '孔子', rating: '9.1', publish_year: '公元前5世纪', genre: '哲学' },
+  { series_id: 'E', title: '道德经', desc: '道家哲学的最高经典。', mood: '哲学', cost: '📖 阅读', author: '老子', rating: '9.2', publish_year: '公元前4世纪', genre: '哲学' },
+  { series_id: 'E', title: '庄子', desc: '道家思想的瑰宝。', mood: '哲学', cost: '📖 阅读', author: '庄子', rating: '9.0', publish_year: '公元前4世纪', genre: '哲学' },
+  { series_id: 'E', title: '理想国', desc: '西方政治哲学的奠基之作。', mood: '哲学', cost: '📖 阅读', author: '柏拉图', rating: '9.0', publish_year: '公元前4世纪', genre: '哲学' },
+  { series_id: 'E', title: '第二性', desc: '西方女性主义理论的奠基之作。', mood: '哲学', cost: '📖 阅读', author: '西蒙·波伏娃', rating: '8.8', publish_year: '1949年', genre: '哲学' },
+  { series_id: 'E', title: '规训与惩罚', desc: '揭示了现代社会如何通过规训机制控制个体。', mood: '哲学', cost: '📖 阅读', author: '米歇尔·福柯', rating: '8.6', publish_year: '1975年', genre: '哲学' },
+  { series_id: 'E', title: '疯癫与文明', desc: '通过梳理西方社会对待疯癫的态度变迁。', mood: '哲学', cost: '📖 阅读', author: '米歇尔·福柯', rating: '8.4', publish_year: '1961年', genre: '哲学' },
+  { series_id: 'E', title: '存在与时间', desc: '20世纪最重要的哲学著作之一。', mood: '哲学', cost: '📖 阅读', author: '海德格尔', rating: '8.3', publish_year: '1927年', genre: '哲学' },
+  { series_id: 'E', title: '纯粹理性批判', desc: '西方哲学史上最重要的著作之一。', mood: '哲学', cost: '📖 阅读', author: '康德', rating: '8.4', publish_year: '1781年', genre: '哲学' },
+  { series_id: 'E', title: '尼各马可伦理学', desc: '西方伦理学史上最重要的著作之一。', mood: '哲学', cost: '📖 阅读', author: '亚里士多德', rating: '8.6', publish_year: '公元前4世纪', genre: '哲学' },
+  { series_id: 'E', title: '沉默的大多数', desc: '王小波最具影响力的杂文集。', mood: '哲学', cost: '📖 阅读', author: '王小波', rating: '8.9', publish_year: '1997年', genre: '哲学' },
+  { series_id: 'E', title: '一只特立独行的猪', desc: '王小波杂文的经典之作。', mood: '哲学', cost: '📖 阅读', author: '王小波', rating: '8.6', publish_year: '1996年', genre: '哲学' },
+  { series_id: 'E', title: '人生的智慧', desc: '叔本华最受欢迎的著作。', mood: '哲学', cost: '📖 阅读', author: '叔本华', rating: '8.3', publish_year: '1851年', genre: '哲学' },
+  { series_id: 'E', title: '查拉图斯特拉如是说', desc: '尼采最具代表性的哲学著作。', mood: '哲学', cost: '📖 阅读', author: '尼采', rating: '8.3', publish_year: '1885年', genre: '哲学' },
+  { series_id: 'E', title: '权力意志', desc: '尼采哲学思想的集大成之作。', mood: '哲学', cost: '📖 阅读', author: '尼采', rating: '8.0', publish_year: '1901年', genre: '哲学' },
+  { series_id: 'E', title: '论自由', desc: '西方自由主义理论的经典文献。', mood: '哲学', cost: '📖 阅读', author: '约翰·密尔', rating: '8.5', publish_year: '1859年', genre: '哲学' },
+  { series_id: 'E', title: '社会契约论', desc: '"人生而自由，却无往不在枷锁之中"。', mood: '哲学', cost: '📖 阅读', author: '卢梭', rating: '8.2', publish_year: '1762年', genre: '哲学' },
+  { series_id: 'E', title: '给青年的十二封信', desc: '美学大师朱光潜为青年读者写作的十二封书信。', mood: '哲学', cost: '📖 阅读', author: '朱光潜', rating: '8.4', publish_year: '1929年', genre: '哲学' },
+
+  // ========== 艺术 ==========
+  { series_id: 'E', title: '艺术的故事', desc: '全球最畅销的艺术史入门读物。', mood: '艺术', cost: '📖 阅读', author: '贡布里希', rating: '9.2', publish_year: '1950年', genre: '艺术' },
+  { series_id: 'E', title: '现代艺术150年', desc: '一部让现代艺术变得容易理解的精彩读本。', mood: '艺术', cost: '📖 阅读', author: '威尔·贡培兹', rating: '8.7', publish_year: '2012年', genre: '艺术' },
+  { series_id: 'E', title: '美的历程', desc: '中国美学史上最具影响力的著作之一。', mood: '艺术', cost: '📖 阅读', author: '李泽厚', rating: '8.8', publish_year: '1981年', genre: '艺术' },
+  { series_id: 'E', title: '美学散步', desc: '一部充满诗意的中国美学随笔。', mood: '艺术', cost: '📖 阅读', author: '宗白华', rating: '8.5', publish_year: '1981年', genre: '艺术' },
+  { series_id: 'E', title: '认识电影', desc: '全球最经典的电影入门教材。', mood: '艺术', cost: '📖 阅读', author: '路易斯·贾内梯', rating: '8.4', publish_year: '1972年', genre: '艺术' },
+  { series_id: 'E', title: '电影批评', desc: '中国最具影响力的电影学者之一戴锦华的文集。', mood: '艺术', cost: '📖 阅读', author: '戴锦华', rating: '8.0', publish_year: '2004年', genre: '艺术' },
+  { series_id: 'E', title: '艺术哲学', desc: '一部从社会学角度分析艺术的经典著作。', mood: '艺术', cost: '📖 阅读', author: '丹纳', rating: '8.3', publish_year: '1869年', genre: '艺术' },
+  { series_id: 'E', title: '罗丹艺术论', desc: '雕塑大师罗丹与作家葛赛尔的对话录。', mood: '艺术', cost: '📖 阅读', author: '罗丹', rating: '8.1', publish_year: '1900年', genre: '艺术' },
+  { series_id: 'E', title: '中国建筑史', desc: '中国建筑史研究的奠基之作。', mood: '艺术', cost: '📖 阅读', author: '梁思成', rating: '8.7', publish_year: '1955年', genre: '艺术' },
+  { series_id: 'E', title: '图像中国建筑史', desc: '用英文为中国古建筑"立传"的经典著作。', mood: '艺术', cost: '📖 阅读', author: '梁思成', rating: '8.4', publish_year: '1984年', genre: '艺术' },
+  { series_id: 'E', title: '书法有法', desc: '一部关于中国书法鉴赏与学习的实用指南。', mood: '艺术', cost: '📖 阅读', author: '孙晓云', rating: '8.1', publish_year: '2002年', genre: '艺术' },
+  { series_id: 'E', title: '写给大家的中国美术史', desc: '蒋勋讲述中国美术发展史。', mood: '艺术', cost: '📖 阅读', author: '蒋勋', rating: '8.5', publish_year: '1990年', genre: '艺术' },
+  { series_id: 'E', title: '写给大家的西方美术史', desc: '系统介绍了西方美术的发展历程。', mood: '艺术', cost: '📖 阅读', author: '蒋勋', rating: '8.4', publish_year: '2004年', genre: '艺术' },
+  { series_id: 'E', title: '听音乐', desc: '一部系统而通俗的音乐欣赏入门教材。', mood: '艺术', cost: '📖 阅读', author: '罗杰·凯密恩', rating: '8.3', publish_year: '2011年', genre: '艺术' },
+  { series_id: 'E', title: '古典音乐欣赏入门', desc: '为古典音乐入门者编写的指南。', mood: '艺术', cost: '📖 阅读', author: '杨燕迪', rating: '8.1', publish_year: '2010年', genre: '艺术' },
+  { series_id: 'E', title: '看电影的艺术', desc: '一本系统介绍电影视听语言的教材。', mood: '艺术', cost: '📖 阅读', author: '约瑟夫·M·博格斯', rating: '8.2', publish_year: '2000年', genre: '艺术' },
+  { series_id: 'E', title: '设计中的设计', desc: '"设计不是一种技能，而是感知世界的方式"。', mood: '艺术', cost: '📖 阅读', author: '原研哉', rating: '8.6', publish_year: '2003年', genre: '艺术' },
+  { series_id: 'E', title: '写给大家的设计书', desc: '一本经典的设计入门读物。', mood: '艺术', cost: '📖 阅读', author: '罗宾·威廉姆斯', rating: '8.2', publish_year: '1994年', genre: '艺术' },
+  { series_id: 'E', title: '艺术与视知觉', desc: '一部从心理学角度分析视觉艺术的经典著作。', mood: '艺术', cost: '📖 阅读', author: '阿恩海姆', rating: '8.0', publish_year: '1954年', genre: '艺术' },
+
+  // ========== 科普 ==========
+  { series_id: 'E', title: '时间简史', desc: '一部向大众普及宇宙学的科普经典。', mood: '科普', cost: '📖 阅读', author: '史蒂芬·霍金', rating: '8.6', publish_year: '1988年', genre: '科普' },
+  { series_id: 'E', title: '万物简史', desc: '一部用幽默笔触书写的科学史。', mood: '科普', cost: '📖 阅读', author: '比尔·布莱森', rating: '8.3', publish_year: '2003年', genre: '科普' },
+  { series_id: 'E', title: '自私的基因', desc: '道金斯提出了"自私的基因"理论。', mood: '科普', cost: '📖 阅读', author: '理查德·道金斯', rating: '8.5', publish_year: '1976年', genre: '科普' },
+  { series_id: 'E', title: '生命是什么', desc: '从物理学角度探讨生命的本质与遗传机制。', mood: '科普', cost: '📖 阅读', author: '薛定谔', rating: '8.4', publish_year: '1944年', genre: '科普' },
+  { series_id: 'E', title: '双螺旋', desc: 'DNA双螺旋结构发现者之一沃森的回忆录。', mood: '科普', cost: '📖 阅读', author: '詹姆斯·沃森', rating: '8.1', publish_year: '1968年', genre: '科普' },
+  { series_id: 'E', title: '数学之美', desc: '一部将数学与信息科学结合起来的科普佳作。', mood: '科普', cost: '📖 阅读', author: '吴军', rating: '8.6', publish_year: '2012年', genre: '科普' },
+  { series_id: 'E', title: '浪潮之巅', desc: '一部关于IT产业历史的经典著作。', mood: '科普', cost: '📖 阅读', author: '吴军', rating: '8.5', publish_year: '2011年', genre: '科普' },
+  { series_id: 'E', title: '全球科技通史', desc: '系统梳理了科技发展的全貌。', mood: '科普', cost: '📖 阅读', author: '吴军', rating: '8.3', publish_year: '2018年', genre: '科普' },
+  { series_id: 'E', title: '智能时代', desc: '吴军对人工智能时代的系统思考。', mood: '科普', cost: '📖 阅读', author: '吴军', rating: '8.0', publish_year: '2016年', genre: '科普' },
+  { series_id: 'E', title: '密码故事', desc: '一部关于密码学历史的科普著作。', mood: '科普', cost: '📖 阅读', author: '西蒙·辛格', rating: '8.2', publish_year: '1999年', genre: '科普' },
+  { series_id: 'E', title: '上帝掷骰子吗', desc: '一部关于量子力学的通俗科普读物。', mood: '科普', cost: '📖 阅读', author: '曹天元', rating: '8.6', publish_year: '2006年', genre: '科普' },
+  { series_id: 'E', title: '从一到无穷大', desc: '一部经典的科普名著。', mood: '科普', cost: '📖 阅读', author: '乔治·伽莫夫', rating: '8.4', publish_year: '1947年', genre: '科普' },
+  { series_id: 'E', title: '宇宙简史', desc: '霍金为普通读者撰写的宇宙学入门书。', mood: '科普', cost: '📖 阅读', author: '史蒂芬·霍金', rating: '8.2', publish_year: '2005年', genre: '科普' },
+  { series_id: 'E', title: '人类群星闪耀时', desc: '选取了人类历史上十四个决定性的瞬间。', mood: '科普', cost: '📖 阅读', author: '斯蒂芬·茨威格', rating: '8.7', publish_year: '1927年', genre: '科普' },
+  { series_id: 'E', title: '寂静的春天', desc: '环境科学的奠基之作。', mood: '科普', cost: '📖 阅读', author: '蕾切尔·卡逊', rating: '8.6', publish_year: '1962年', genre: '科普' },
+  { series_id: 'E', title: '物种起源', desc: '进化论的奠基之作。', mood: '科普', cost: '📖 阅读', author: '达尔文', rating: '8.7', publish_year: '1859年', genre: '科普' },
+  { series_id: 'E', title: '人类宇宙', desc: 'BBC纪录片同名书籍。', mood: '科普', cost: '📖 阅读', author: '布赖恩·考克斯', rating: '8.0', publish_year: '2011年', genre: '科普' },
+
+  // ============================================================
+  // 区块 6: F (吃遍全国的1000道家常菜)
+  // ============================================================
   { series_id: 'F', title: '番茄炒蛋', desc: '国民第一菜', mood: '温暖', cost: '15分钟' },
   { series_id: 'F', title: '红烧肉', desc: '妈妈的味道', mood: '温暖', cost: '1小时' },
   { series_id: 'F', title: '鱼香肉丝', desc: '酸甜辣', mood: '治愈', cost: '25分钟' },
@@ -245,7 +417,10 @@ const SEED_DATA = [
   { series_id: 'F', title: '蒜蓉西兰花', desc: '健康素食', mood: '治愈', cost: '10分钟' },
   { series_id: 'F', title: '麻婆豆腐', desc: '下饭神器', mood: '解压', cost: '15分钟' },
   { series_id: 'F', title: '清蒸鲈鱼', desc: '原汁原味', mood: '温暖', cost: '20分钟' },
-  // 系列 G：1000个极简生活妙招
+
+  // ============================================================
+  // 区块 7: G (1000个极简生活妙招)
+  // ============================================================
   { series_id: 'G', title: '用旧报纸擦玻璃', desc: '废物利用', mood: '清爽', cost: '5分钟' },
   { series_id: 'G', title: '一物多用：小苏打', desc: '清洁万能', mood: '搞钱', cost: '5分钟' },
   { series_id: 'G', title: '衣架变手机支架', desc: 'DIY', mood: '专注', cost: '2分钟' },
@@ -256,7 +431,10 @@ const SEED_DATA = [
   { series_id: 'G', title: '白醋去除水垢', desc: '清洁', mood: '清爽', cost: '10分钟' },
   { series_id: 'G', title: '自制香薰蜡烛', desc: '仪式感', mood: '治愈', cost: '20分钟' },
   { series_id: 'G', title: '旧书变装饰品', desc: '文艺', mood: '文艺', cost: '10分钟' },
-  // 系列 H：1000个周末去哪儿
+
+  // ============================================================
+  // 区块 8: H (1000个周末去哪儿)
+  // ============================================================
   { series_id: 'H', title: '本地植物园', desc: '亲近自然', mood: '治愈', cost: '半天' },
   { series_id: 'H', title: '城市美术馆', desc: '艺术熏陶', mood: '文艺', cost: '半天' },
   { series_id: 'H', title: '近郊露营地', desc: '星空夜色', mood: '治愈', cost: '1天' },
@@ -267,18 +445,24 @@ const SEED_DATA = [
   { series_id: 'H', title: '湖边骑行', desc: '微风拂面', mood: '治愈', cost: '半天' },
   { series_id: 'H', title: '农场采摘', desc: '田园之乐', mood: '温暖', cost: '半天' },
   { series_id: 'H', title: '胡同Citywalk', desc: '城市探索', mood: '文艺', cost: '半天' },
-  // 系列 I：1000个治愈内耗的瞬间
-  { series_id: 'I', title: '听雨声白噪音', desc: '静心', mood: '治愈', cost: '5分钟' },
-  { series_id: 'I', title: '看云朵变化', desc: '放空', mood: '治愈', cost: '10分钟' },
-  { series_id: 'I', title: '深呼吸冥想', desc: '减压', mood: '治愈', cost: '5分钟' },
-  { series_id: 'I', title: '写感恩日记', desc: '积极心态', mood: '治愈', cost: '10分钟' },
-  { series_id: 'I', title: '泡一杯热茶', desc: '温暖自己', mood: '治愈', cost: '5分钟' },
-  { series_id: 'I', title: '抱抱大树', desc: '接地气', mood: '治愈', cost: '3分钟' },
-  { series_id: 'I', title: '画一幅涂鸦', desc: '释放情绪', mood: '治愈', cost: '15分钟' },
-  { series_id: 'I', title: '听一首老歌', desc: '回忆美好', mood: '治愈', cost: '3分钟' },
-  { series_id: 'I', title: '仰望星空', desc: '渺小与伟大', mood: '治愈', cost: '10分钟' },
-  { series_id: 'I', title: '和宠物玩耍', desc: '无条件爱', mood: '治愈', cost: '10分钟' },
-  // 系列 J：1000个搞钱/省钱冷知识
+
+  // ============================================================
+  // 区块 9: I (1000个亲子美好时光 - 3-6岁亲子游戏)
+  // ============================================================
+  { series_id: 'I', title: '躲猫猫', desc: '培养客体永久性，建立安全感', mood: '开心', cost: '10分钟' },
+  { series_id: 'I', title: '搭积木', desc: '锻炼手眼协调和空间想象力', mood: '专注', cost: '20分钟' },
+  { series_id: 'I', title: '手指画', desc: '激发创造力，感受色彩', mood: '开心', cost: '15分钟' },
+  { series_id: 'I', title: '角色扮演（过家家）', desc: '发展语言和社交能力', mood: '温暖', cost: '30分钟' },
+  { series_id: 'I', title: '寻宝游戏', desc: '培养观察力和探索精神', mood: '充满活力', cost: '20分钟' },
+  { series_id: 'I', title: '拼图游戏', desc: '提升专注力和逻辑思维', mood: '专注', cost: '15分钟' },
+  { series_id: 'I', title: '传声筒', desc: '练习倾听和表达', mood: '开心', cost: '10分钟' },
+  { series_id: 'I', title: '跳房子', desc: '锻炼大动作和平衡感', mood: '充满活力', cost: '15分钟' },
+  { series_id: 'I', title: '老鹰捉小鸡', desc: '培养反应能力和团队合作', mood: '开心', cost: '20分钟' },
+  { series_id: 'I', title: '模仿秀（Simon Says）', desc: '锻炼听指令和身体协调', mood: '开心', cost: '10分钟' },
+
+  // ============================================================
+  // 区块 10: J (1000个搞钱/省钱冷知识)
+  // ============================================================
   { series_id: 'J', title: '信用卡积分换里程', desc: '省钱', mood: '搞钱', cost: '2分钟' },
   { series_id: 'J', title: '超市晚间折扣时段', desc: '省钱', mood: '搞钱', cost: '1分钟' },
   { series_id: 'J', title: '二手平台出闲置', desc: '变现', mood: '搞钱', cost: '10分钟' },
@@ -288,168 +472,7 @@ const SEED_DATA = [
   { series_id: 'J', title: '顺风车乘客', desc: '副业', mood: '搞钱', cost: '5分钟' },
   { series_id: 'J', title: '问卷调查赚积分', desc: '小钱', mood: '搞钱', cost: '10分钟' },
   { series_id: 'J', title: '用购物返利APP', desc: '省钱', mood: '搞钱', cost: '2分钟' },
-  { series_id: 'J', title: '早起抢优惠券', desc: '省钱', mood: '搞钱', cost: '5分钟' }
-];
-
-// ======================= 新增书籍数据（147 本） =======================
-const BOOKS_RAW = [
-  // ========== 文学 ==========
-  { t: '百年孤独', a: '加西亚·马尔克斯', r: '9.3', p: '1967年', g: '文学', s: '魔幻现实主义巅峰之作，讲述了布恩迪亚家族七代人的传奇故事，马孔多小镇的兴衰史映射了整个拉美大陆的百年变迁。' },
-  { t: '三体', a: '刘慈欣', r: '8.9', p: '2008年', g: '文学', s: '中国科幻文学的里程碑之作，从文革时期的红岸基地出发，揭示了宇宙文明间的黑暗森林法则。' },
-  { t: '围城', a: '钱钟书', r: '9.0', p: '1947年', g: '文学', s: '一部充满智慧与幽默的讽刺杰作，深刻揭示了现代知识分子的精神困境。' },
-  { t: '边城', a: '沈从文', r: '8.7', p: '1934年', g: '文学', s: '中国现代文学中最纯净的田园牧歌，湘西茶峒小镇上少女翠翠的爱情故事。' },
-  { t: '白鹿原', a: '陈忠实', r: '9.2', p: '1993年', g: '文学', s: '渭河平原上白、鹿两家的恩怨纠葛，浓缩了中国近现代半个多世纪的历史变迁。' },
-  { t: '尘埃落定', a: '阿来', r: '8.9', p: '1998年', g: '文学', s: '通过土司家族"傻子"少爷的视角，讲述了藏族土司制度的兴衰与消亡。' },
-  { t: '黄金时代', a: '王小波', r: '8.9', p: '1994年', g: '文学', s: '以知青岁月为背景，展现了荒诞年代里对自由与真实的执着追求。' },
-  { t: '白夜行', a: '东野圭吾', r: '9.2', p: '1999年', g: '文学', s: '东野圭吾的巅峰之作，一段令人窒息的爱与罪。' },
-  { t: '嫌疑人X的献身', a: '东野圭吾', r: '9.0', p: '2005年', g: '文学', s: '将爱情与推理完美融合，最纯粹的爱可以让人献出一切。' },
-  { t: '1984', a: '乔治·奥威尔', r: '9.4', p: '1949年', g: '文学', s: '反乌托邦文学的经典之作，对权力、真理与自由的思考至今仍有强烈的现实意义。' },
-  { t: '动物农场', a: '乔治·奥威尔', r: '9.3', p: '1945年', g: '文学', s: '一部用动物寓言写成的政治讽刺经典。' },
-  { t: '局外人', a: '加缪', r: '9.1', p: '1942年', g: '文学', s: '存在主义文学的奠基之作，揭示了社会对"不合规矩"之人的排斥与审判。' },
-  { t: '鼠疫', a: '加缪', r: '8.9', p: '1947年', g: '文学', s: '一部关于疫情下人性与反抗的哲理小说。' },
-  { t: '灿烂千阳', a: '卡勒德·胡赛尼', r: '8.8', p: '2007年', g: '文学', s: '通过阿富汗两位女性的故事，展现了战争阴影下女性的苦难与坚韧。' },
-  { t: '挪威的森林', a: '村上春树', r: '8.7', p: '1987年', g: '文学', s: '村上春树最畅销的纯爱小说，一段关于青春、爱情与死亡的忧伤记忆。' },
-  { t: '海边的卡夫卡', a: '村上春树', r: '8.5', p: '2002年', g: '文学', s: '一部充满隐喻与奇幻色彩的成长小说。' },
-  { t: '魔戒', a: '托尔金', r: '9.0', p: '1954年', g: '文学', s: '现代奇幻文学的奠基之作。' },
-  { t: '傲慢与偏见', a: '简·奥斯汀', r: '9.0', p: '1813年', g: '文学', s: '英国文学史上最受欢迎的爱情小说之一。' },
-  { t: '简爱', a: '夏洛蒂·勃朗特', r: '8.7', p: '1847年', g: '文学', s: '一部追求女性独立与尊严的经典之作。' },
-  { t: '呼啸山庄', a: '艾米莉·勃朗特', r: '8.8', p: '1847年', g: '文学', s: '一部充满暴力与激情的哥特式爱情悲剧。' },
-  { t: '悲惨世界', a: '雨果', r: '9.1', p: '1862年', g: '文学', s: '法国文学史上最宏大的社会画卷之一。' },
-  { t: '战争与和平', a: '托尔斯泰', r: '9.5', p: '1869年', g: '文学', s: '文学史上最伟大的小说之一。' },
-  { t: '安娜·卡列尼娜', a: '托尔斯泰', r: '9.3', p: '1877年', g: '文学', s: '探讨爱情、婚姻与社会道德的巨著。' },
-  { t: '罪与罚', a: '陀思妥耶夫斯基', r: '9.2', p: '1866年', g: '文学', s: '深入探讨人性、罪恶与救赎的心理小说巅峰。' },
-  { t: '卡拉马佐夫兄弟', a: '陀思妥耶夫斯基', r: '9.4', p: '1880年', g: '文学', s: '陀思妥耶夫斯基最后的巅峰之作。' },
-  { t: '大师与玛格丽特', a: '布尔加科夫', r: '9.1', p: '1967年', g: '文学', s: '将魔幻与现实完美融合的讽刺杰作。' },
-  { t: '红与黑', a: '司汤达', r: '8.9', p: '1830年', g: '文学', s: '法国现实主义文学的开山之作。' },
-  { t: '飘', a: '玛格丽特·米切尔', r: '9.3', p: '1936年', g: '文学', s: '美国文学史上最受欢迎的小说之一。' },
-  { t: '老人与海', a: '海明威', r: '8.5', p: '1952年', g: '文学', s: '海明威最具代表性的作品，展现了人类不屈不挠的精神力量。' },
-  { t: '基督山伯爵', a: '大仲马', r: '9.0', p: '1844年', g: '文学', s: '一部关于复仇与正义的经典通俗小说。' },
-  { t: '骆驼祥子', a: '老舍', r: '8.8', p: '1936年', g: '文学', s: '北平车夫祥子三次买车三次失去的悲剧人生。' },
-  { t: '四世同堂', a: '老舍', r: '8.9', p: '1949年', g: '文学', s: '一部描写抗战时期北平市民生活的长篇巨著。' },
-  { t: '寒夜', a: '巴金', r: '8.1', p: '1947年', g: '文学', s: '巴金最后的长篇小说，也是一部深刻的社会悲剧。' },
-  { t: '家', a: '巴金', r: '8.4', p: '1931年', g: '文学', s: '巴金代表作《激流三部曲》之首。' },
-  { t: '呐喊', a: '鲁迅', r: '9.2', p: '1923年', g: '文学', s: '中国现代小说的奠基之作。' },
-  { t: '彷徨', a: '鲁迅', r: '8.9', p: '1926年', g: '文学', s: '鲁迅第二部小说集。' },
-  { t: '天龙八部', a: '金庸', r: '9.2', p: '1963年', g: '文学', s: '金庸武侠巅峰之作。' },
-  { t: '射雕英雄传', a: '金庸', r: '9.0', p: '1957年', g: '文学', s: '金庸武侠经典，郭靖黄蓉的爱情与成长。' },
-
-  // ========== 科幻 ==========
-  { t: '三体2：黑暗森林', a: '刘慈欣', r: '9.3', p: '2008年', g: '科幻', s: '提出了震撼人心的"黑暗森林"宇宙社会学理论。' },
-  { t: '三体3：死神永生', a: '刘慈欣', r: '9.2', p: '2010年', g: '科幻', s: '将科幻文学的格局推向了前所未有的高度。' },
-  { t: '球状闪电', a: '刘慈欣', r: '8.5', p: '2005年', g: '科幻', s: '刘慈欣的早期科幻杰作。' },
-  { t: '流浪地球', a: '刘慈欣', r: '8.6', p: '2000年', g: '科幻', s: '人类带着地球一起逃离太阳系，踏上星际流浪。' },
-  { t: '银河帝国：基地', a: '艾萨克·阿西莫夫', r: '9.1', p: '1951年', g: '科幻', s: '心理史学家谢顿预见了银河帝国的衰亡。' },
-  { t: '沙丘', a: '弗兰克·赫伯特', r: '8.7', p: '1965年', g: '科幻', s: '科幻史上的里程碑之作，宏大的宇宙史诗。' },
-  { t: '海伯利安', a: '丹·西蒙斯', r: '8.8', p: '1989年', g: '科幻', s: '一部融合了诗歌、宗教与硬核科幻的巨著。' },
-  { t: '安德的游戏', a: '奥森·斯科特·卡德', r: '8.7', p: '1985年', g: '科幻', s: '天才少年安德的成长故事。' },
-  { t: '沙丘救世主', a: '弗兰克·赫伯特', r: '8.2', p: '1969年', g: '科幻', s: '《沙丘》续集，保罗·厄崔迪成为皇帝后面临的危机。' },
-  { t: '沙丘之子', a: '弗兰克·赫伯特', r: '8.3', p: '1976年', g: '科幻', s: '沙丘系列第三部。' },
-  { t: '基地与帝国', a: '艾萨克·阿西莫夫', r: '8.8', p: '1952年', g: '科幻', s: '基地系列第二部。' },
-  { t: '第二基地', a: '艾萨克·阿西莫夫', r: '8.9', p: '1953年', g: '科幻', s: '基地三部曲终结篇。' },
-  { t: '银河系搭车客指南', a: '道格拉斯·亚当斯', r: '8.6', p: '1979年', g: '科幻', s: '一部充满英式幽默的科幻喜剧。' },
-  { t: '神经漫游者', a: '威廉·吉布森', r: '8.4', p: '1984年', g: '科幻', s: '赛博朋克流派的奠基之作。' },
-  { t: '仿生人会梦见电子羊吗？', a: '菲利普·迪克', r: '8.3', p: '1968年', g: '科幻', s: '《银翼杀手》的原著小说。' },
-  { t: '尤比克', a: '菲利普·迪克', r: '8.1', p: '1969年', g: '科幻', s: '在死亡与冷冻复苏的未来世界中，现实与幻觉交织。' },
-  { t: '高堡奇人', a: '菲利普·迪克', r: '8.2', p: '1962年', g: '科幻', s: '假设轴心国赢得二战。' },
-  { t: '时间机器', a: 'H.G.威尔斯', r: '8.2', p: '1895年', g: '科幻', s: '科幻文学的经典开山之作。' },
-  { t: '世界大战', a: 'H.G.威尔斯', r: '8.1', p: '1898年', g: '科幻', s: '火星人入侵地球的经典故事。' },
-  { t: '童年的终结', a: '阿瑟·克拉克', r: '8.3', p: '1953年', g: '科幻', s: '外星人降临地球帮助人类实现和平。' },
-
-  // ========== 历史 ==========
-  { t: '史记', a: '司马迁', r: '9.2', p: '公元前1世纪', g: '历史', s: '中国历史上最伟大的史学著作。' },
-  { t: '资治通鉴', a: '司马光', r: '9.0', p: '1084年', g: '历史', s: '中国历史上规模最大的编年体通史。' },
-  { t: '未来简史', a: '尤瓦尔·赫拉利', r: '8.4', p: '2015年', g: '历史', s: '探讨了在21世纪，人类将如何追求"永生、幸福、神性"。' },
-  { t: '枪炮、病菌与钢铁', a: '贾雷德·戴蒙德', r: '8.9', p: '1997年', g: '历史', s: '一部解释人类社会发展不平等根源的宏大著作。' },
-  { t: '万历十五年', a: '黄仁宇', r: '8.5', p: '1982年', g: '历史', s: '一部改变中国人历史观的名著。' },
-  { t: '中国大历史', a: '黄仁宇', r: '8.0', p: '1991年', g: '历史', s: '以宏观的视野审视中国历史。' },
-  { t: '全球通史', a: '斯塔夫里阿诺斯', r: '8.7', p: '1970年', g: '历史', s: '一部打破欧洲中心论的世界史经典。' },
-  { t: '中国近代史', a: '蒋廷黻', r: '8.6', p: '1938年', g: '历史', s: '一部简洁而深刻的近代史著作。' },
-  { t: '剑桥中国史', a: '费正清等', r: '8.8', p: '1978年', g: '历史', s: '西方学术界最具权威的中国通史之一。' },
-  { t: '丝绸之路', a: '彼得·弗兰科潘', r: '8.2', p: '2015年', g: '历史', s: '一部从全球视角重新解读世界史的著作。' },
-  { t: '大国的兴衰', a: '保罗·肯尼迪', r: '8.1', p: '1987年', g: '历史', s: '一部关于国际政治经济格局的经典之作。' },
-  { t: '罗马帝国衰亡史', a: '爱德华·吉本', r: '8.7', p: '1776年', g: '历史', s: '西方史学史上的不朽巨著。' },
-  { t: '法国大革命讲稿', a: '阿克顿勋爵', r: '8.0', p: '1900年', g: '历史', s: '深入分析了法国大革命的起因、过程及其影响。' },
-  { t: '历史研究', a: '汤因比', r: '8.3', p: '1934年', g: '历史', s: '汤因比文明史观的代表作。' },
-  { t: '叫魂', a: '孔飞力', r: '8.9', p: '1990年', g: '历史', s: '以1768年叫魂妖术大恐慌为切入点。' },
-
-  // ========== 经济 ==========
-  { t: '穷查理宝典', a: '查理·芒格', r: '8.9', p: '2005年', g: '经济', s: '投资大师查理·芒格智慧箴言的集大成之作。' },
-  { t: '聪明的投资者', a: '本杰明·格雷厄姆', r: '8.8', p: '1949年', g: '经济', s: '价值投资的开山之作。' },
-  { t: '国富论', a: '亚当·斯密', r: '8.5', p: '1776年', g: '经济', s: '现代经济学的奠基之作。' },
-  { t: '经济学原理', a: '曼昆', r: '8.4', p: '1998年', g: '经济', s: '全球最受欢迎的经济学入门教材。' },
-  { t: '黑天鹅', a: '纳西姆·塔勒布', r: '8.2', p: '2007年', g: '经济', s: '一部关于不确定性、风险与随机性的经典著作。' },
-  { t: '反脆弱', a: '纳西姆·塔勒布', r: '8.1', p: '2012年', g: '经济', s: '提出了"反脆弱"这一全新概念。' },
-  { t: '原则', a: '瑞·达利欧', r: '8.4', p: '2017年', g: '经济', s: '桥水基金创始人瑞·达利欧的人生与工作原则总结。' },
-  { t: '创新者的窘境', a: '克莱顿·克里斯坦森', r: '8.6', p: '1997年', g: '经济', s: '提出了"颠覆性创新"理论。' },
-  { t: '从优秀到卓越', a: '吉姆·柯林斯', r: '8.3', p: '2001年', g: '经济', s: '总结了从"优秀"到"卓越"的关键要素。' },
-  { t: '高效能人士的七个习惯', a: '史蒂芬·柯维', r: '8.6', p: '1989年', g: '经济', s: '一部影响无数人的个人成长经典。' },
-  { t: '影响力', a: '罗伯特·西奥迪尼', r: '8.6', p: '1984年', g: '经济', s: '揭示了六大影响力原则。' },
-  { t: '思考，快与慢', a: '丹尼尔·卡尼曼', r: '8.5', p: '2011年', g: '经济', s: '诺贝尔经济学奖得主卡尼曼的代表作。' },
-  { t: '穷爸爸富爸爸', a: '罗伯特·清崎', r: '8.2', p: '1997年', g: '经济', s: '一部改变无数人理财观念的畅销书。' },
-  { t: '小狗钱钱', a: '博多·舍费尔', r: '8.6', p: '1999年', g: '经济', s: '一本写给儿童的理财启蒙书。' },
-  { t: '投资中最简单的事', a: '邱国鹭', r: '8.4', p: '2014年', g: '经济', s: '中国知名基金经理邱国鹭的投资心得。' },
-
-  // ========== 哲学 ==========
-  { t: '西方哲学史', a: '罗素', r: '8.5', p: '1945年', g: '哲学', s: '诺贝尔文学奖得主罗素的哲学史经典。' },
-  { t: '中国哲学简史', a: '冯友兰', r: '8.8', p: '1948年', g: '哲学', s: '中国哲学入门的最佳选择。' },
-  { t: '论语', a: '孔子', r: '9.1', p: '公元前5世纪', g: '哲学', s: '儒家思想的奠基之作。' },
-  { t: '道德经', a: '老子', r: '9.2', p: '公元前4世纪', g: '哲学', s: '道家哲学的最高经典。' },
-  { t: '庄子', a: '庄子', r: '9.0', p: '公元前4世纪', g: '哲学', s: '道家思想的瑰宝。' },
-  { t: '理想国', a: '柏拉图', r: '9.0', p: '公元前4世纪', g: '哲学', s: '西方政治哲学的奠基之作。' },
-  { t: '第二性', a: '西蒙·波伏娃', r: '8.8', p: '1949年', g: '哲学', s: '西方女性主义理论的奠基之作。' },
-  { t: '规训与惩罚', a: '米歇尔·福柯', r: '8.6', p: '1975年', g: '哲学', s: '揭示了现代社会如何通过规训机制控制个体。' },
-  { t: '疯癫与文明', a: '米歇尔·福柯', r: '8.4', p: '1961年', g: '哲学', s: '通过梳理西方社会对待疯癫的态度变迁。' },
-  { t: '存在与时间', a: '海德格尔', r: '8.3', p: '1927年', g: '哲学', s: '20世纪最重要的哲学著作之一。' },
-  { t: '纯粹理性批判', a: '康德', r: '8.4', p: '1781年', g: '哲学', s: '西方哲学史上最重要的著作之一。' },
-  { t: '尼各马可伦理学', a: '亚里士多德', r: '8.6', p: '公元前4世纪', g: '哲学', s: '西方伦理学史上最重要的著作之一。' },
-  { t: '沉默的大多数', a: '王小波', r: '8.9', p: '1997年', g: '哲学', s: '王小波最具影响力的杂文集。' },
-  { t: '一只特立独行的猪', a: '王小波', r: '8.6', p: '1996年', g: '哲学', s: '王小波杂文的经典之作。' },
-  { t: '人生的智慧', a: '叔本华', r: '8.3', p: '1851年', g: '哲学', s: '叔本华最受欢迎的著作。' },
-  { t: '查拉图斯特拉如是说', a: '尼采', r: '8.3', p: '1885年', g: '哲学', s: '尼采最具代表性的哲学著作。' },
-  { t: '权力意志', a: '尼采', r: '8.0', p: '1901年', g: '哲学', s: '尼采哲学思想的集大成之作。' },
-  { t: '论自由', a: '约翰·密尔', r: '8.5', p: '1859年', g: '哲学', s: '西方自由主义理论的经典文献。' },
-  { t: '社会契约论', a: '卢梭', r: '8.2', p: '1762年', g: '哲学', s: '"人生而自由，却无往不在枷锁之中"。' },
-  { t: '给青年的十二封信', a: '朱光潜', r: '8.4', p: '1929年', g: '哲学', s: '美学大师朱光潜为青年读者写作的十二封书信。' },
-
-  // ========== 艺术 ==========
-  { t: '艺术的故事', a: '贡布里希', r: '9.2', p: '1950年', g: '艺术', s: '全球最畅销的艺术史入门读物。' },
-  { t: '现代艺术150年', a: '威尔·贡培兹', r: '8.7', p: '2012年', g: '艺术', s: '一部让现代艺术变得容易理解的精彩读本。' },
-  { t: '美的历程', a: '李泽厚', r: '8.8', p: '1981年', g: '艺术', s: '中国美学史上最具影响力的著作之一。' },
-  { t: '美学散步', a: '宗白华', r: '8.5', p: '1981年', g: '艺术', s: '一部充满诗意的中国美学随笔。' },
-  { t: '认识电影', a: '路易斯·贾内梯', r: '8.4', p: '1972年', g: '艺术', s: '全球最经典的电影入门教材。' },
-  { t: '电影批评', a: '戴锦华', r: '8.0', p: '2004年', g: '艺术', s: '中国最具影响力的电影学者之一戴锦华的文集。' },
-  { t: '艺术哲学', a: '丹纳', r: '8.3', p: '1869年', g: '艺术', s: '一部从社会学角度分析艺术的经典著作。' },
-  { t: '罗丹艺术论', a: '罗丹', r: '8.1', p: '1900年', g: '艺术', s: '雕塑大师罗丹与作家葛赛尔的对话录。' },
-  { t: '中国建筑史', a: '梁思成', r: '8.7', p: '1955年', g: '艺术', s: '中国建筑史研究的奠基之作。' },
-  { t: '图像中国建筑史', a: '梁思成', r: '8.4', p: '1984年', g: '艺术', s: '用英文为中国古建筑"立传"的经典著作。' },
-  { t: '书法有法', a: '孙晓云', r: '8.1', p: '2002年', g: '艺术', s: '一部关于中国书法鉴赏与学习的实用指南。' },
-  { t: '写给大家的中国美术史', a: '蒋勋', r: '8.5', p: '1990年', g: '艺术', s: '蒋勋讲述中国美术发展史。' },
-  { t: '写给大家的西方美术史', a: '蒋勋', r: '8.4', p: '2004年', g: '艺术', s: '系统介绍了西方美术的发展历程。' },
-  { t: '听音乐', a: '罗杰·凯密恩', r: '8.3', p: '2011年', g: '艺术', s: '一部系统而通俗的音乐欣赏入门教材。' },
-  { t: '古典音乐欣赏入门', a: '杨燕迪', r: '8.1', p: '2010年', g: '艺术', s: '为古典音乐入门者编写的指南。' },
-  { t: '看电影的艺术', a: '约瑟夫·M·博格斯', r: '8.2', p: '2000年', g: '艺术', s: '一本系统介绍电影视听语言的教材。' },
-  { t: '设计中的设计', a: '原研哉', r: '8.6', p: '2003年', g: '艺术', s: '"设计不是一种技能，而是感知世界的方式"。' },
-  { t: '写给大家的设计书', a: '罗宾·威廉姆斯', r: '8.2', p: '1994年', g: '艺术', s: '一本经典的设计入门读物。' },
-  { t: '艺术与视知觉', a: '阿恩海姆', r: '8.0', p: '1954年', g: '艺术', s: '一部从心理学角度分析视觉艺术的经典著作。' },
-
-  // ========== 科普 ==========
-  { t: '时间简史', a: '史蒂芬·霍金', r: '8.6', p: '1988年', g: '科普', s: '一部向大众普及宇宙学的科普经典。' },
-  { t: '万物简史', a: '比尔·布莱森', r: '8.3', p: '2003年', g: '科普', s: '一部用幽默笔触书写的科学史。' },
-  { t: '自私的基因', a: '理查德·道金斯', r: '8.5', p: '1976年', g: '科普', s: '道金斯提出了"自私的基因"理论。' },
-  { t: '生命是什么', a: '薛定谔', r: '8.4', p: '1944年', g: '科普', s: '从物理学角度探讨生命的本质与遗传机制。' },
-  { t: '双螺旋', a: '詹姆斯·沃森', r: '8.1', p: '1968年', g: '科普', s: 'DNA双螺旋结构发现者之一沃森的回忆录。' },
-  { t: '数学之美', a: '吴军', r: '8.6', p: '2012年', g: '科普', s: '一部将数学与信息科学结合起来的科普佳作。' },
-  { t: '浪潮之巅', a: '吴军', r: '8.5', p: '2011年', g: '科普', s: '一部关于IT产业历史的经典著作。' },
-  { t: '全球科技通史', a: '吴军', r: '8.3', p: '2018年', g: '科普', s: '系统梳理了科技发展的全貌。' },
-  { t: '智能时代', a: '吴军', r: '8.0', p: '2016年', g: '科普', s: '吴军对人工智能时代的系统思考。' },
-  { t: '密码故事', a: '西蒙·辛格', r: '8.2', p: '1999年', g: '科普', s: '一部关于密码学历史的科普著作。' },
-  { t: '上帝掷骰子吗', a: '曹天元', r: '8.6', p: '2006年', g: '科普', s: '一部关于量子力学的通俗科普读物。' },
-  { t: '从一到无穷大', a: '乔治·伽莫夫', r: '8.4', p: '1947年', g: '科普', s: '一部经典的科普名著。' },
-  { t: '宇宙简史', a: '史蒂芬·霍金', r: '8.2', p: '2005年', g: '科普', s: '霍金为普通读者撰写的宇宙学入门书。' },
-  { t: '人类群星闪耀时', a: '斯蒂芬·茨威格', r: '8.7', p: '1927年', g: '科普', s: '选取了人类历史上十四个决定性的瞬间。' },
-  { t: '寂静的春天', a: '蕾切尔·卡逊', r: '8.6', p: '1962年', g: '科普', s: '环境科学的奠基之作。' },
-  { t: '物种起源', a: '达尔文', r: '8.7', p: '1859年', g: '科普', s: '进化论的奠基之作。' },
-  { t: '人类宇宙', a: '布赖恩·考克斯', r: '8.0', p: '2011年', g: '科普', s: 'BBC纪录片同名书籍。' },
+  { series_id: 'J', title: '早起抢优惠券', desc: '省钱', mood: '搞钱', cost: '5分钟' },
 ];
 
 // ======================= 数据初始化 =======================
@@ -459,7 +482,7 @@ export async function onRequest(context) {
   try {
     // 1. 建表（单行 SQL，避免 D1 多行解析问题）
     await env.DB.prepare(
-      'CREATE TABLE IF NOT EXISTS content_library (id INTEGER PRIMARY KEY AUTOINCREMENT, series_id TEXT NOT NULL, title TEXT NOT NULL, description TEXT, mood_tag TEXT, cost_time TEXT, pushed INTEGER DEFAULT 0, push_date TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)'
+      'CREATE TABLE IF NOT EXISTS content_library (id INTEGER PRIMARY KEY AUTOINCREMENT, series_id TEXT NOT NULL, title TEXT NOT NULL, description TEXT, mood_tag TEXT, cost_time TEXT, author TEXT, rating TEXT, publish_year TEXT, genre TEXT, pushed INTEGER DEFAULT 0, push_date TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)'
     ).run();
 
     // 2. 检查是否已有数据
@@ -474,42 +497,20 @@ export async function onRequest(context) {
       });
     }
 
-    // 3. 构造原有 100 条数据
-    const seedInsert = SEED_DATA.map(item => ({
+    // 3. 统一处理所有数据（现在所有区块格式完全一致）
+    const ALL_DATA = SEED_DATA.map(item => ({
       series_id: item.series_id,
       title: item.title,
       desc: item.desc,
       mood: item.mood,
       cost: item.cost,
-      author: null,
-      rating: null,
-      publish_year: null,
-      genre: null
+      author: item.author || null,
+      rating: item.rating || null,
+      publish_year: item.publish_year || null,
+      genre: item.genre || null
     }));
 
-    // 4. 构造书籍数据
-    const bookInsert = BOOKS_RAW.map(b => ({
-      series_id: 'E',
-      title: b.t,
-      desc: b.s,
-      mood: b.g,
-      cost: '📖 阅读',
-      author: b.a,
-      rating: b.r,
-      publish_year: b.p,
-      genre: b.g
-    }));
-
-    // 5. 过滤掉与原有系列 E 重复的书籍
-    const originalE_Titles = new Set(
-      SEED_DATA.filter(d => d.series_id === 'E').map(d => d.title)
-    );
-    const newBooks = bookInsert.filter(b => !originalE_Titles.has(b.title));
-
-    // 6. 合并所有数据
-    const ALL_DATA = [...seedInsert, ...newBooks];
-
-    // 7. 批量插入
+    // 4. 批量插入
     const stmt = env.DB.prepare(
       'INSERT INTO content_library (series_id, title, description, mood_tag, cost_time, author, rating, publish_year, genre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
     );
@@ -529,9 +530,7 @@ export async function onRequest(context) {
     await env.DB.batch(batch);
 
     return new Response(JSON.stringify({
-      message: `✅ 数据初始化成功！原有 ${SEED_DATA.length} 条 + 新增书籍 ${newBooks.length} 本，共 ${ALL_DATA.length} 条`,
-      originalCount: SEED_DATA.length,
-      newBooksCount: newBooks.length,
+      message: `✅ 数据初始化成功！共 ${ALL_DATA.length} 条`,
       totalCount: ALL_DATA.length
     }), {
       status: 200,
