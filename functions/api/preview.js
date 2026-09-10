@@ -1,83 +1,492 @@
-// functions/api/preview.js
-export async function onRequest(context) {
-  const { request, env } = context;
-  const url = new URL(request.url);
-  const seriesParam = url.searchParams.get('series');
-
-  if (!seriesParam) {
-    return new Response(JSON.stringify({ error: '请选择至少一个系列' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-
-  // 解析多个系列，如 "A,B,C" 或 "A"
-  const seriesList = seriesParam
-    .split(',')
-    .map(s => s.trim())
-    .filter(s => /^[A-J]$/.test(s));
-
-  if (seriesList.length === 0) {
-    return new Response(JSON.stringify({ error: '请选择有效的系列 (A-J)' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-
-  try {
-    // 用 IN 查询支持多个系列
-    const placeholders = seriesList.map(() => '?').join(',');
-
-    // 从选中的系列随机取 5 条未推送内容
-    const stmt = env.DB.prepare(
-      `SELECT series_id, title, description, mood_tag, cost_time, 
-              author, rating, publish_year, genre
-       FROM content_library 
-       WHERE series_id IN (${placeholders}) AND pushed = 0 
-       ORDER BY RANDOM() 
-       LIMIT 5`
-    ).bind(...seriesList);
-    const result = await stmt.all();
-    let items = result.results;
-
-    // 不足 5 条，从已推送的补
-    if (items.length < 5) {
-      const need = 5 - items.length;
-      const fallbackStmt = env.DB.prepare(
-        `SELECT series_id, title, description, mood_tag, cost_time, 
-                author, rating, publish_year, genre
-         FROM content_library 
-         WHERE series_id IN (${placeholders})
-         ORDER BY RANDOM() 
-         LIMIT ?`
-      ).bind(...seriesList, need);
-      const fallbackResult = await fallbackStmt.all();
-      items = [...items, ...fallbackResult.results];
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>灵感预览 · 方塘 Mindfeed</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(251, 191, 36, 0.08), transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(96, 165, 250, 0.08), transparent 45%),
+        #0f0c29;
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px 32px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      max-width: 1400px;
+      width: 100%;
     }
 
-    // 还不足 5 条，从所有内容随机补
-    if (items.length < 5) {
-      const need = 5 - items.length;
-      const extraStmt = env.DB.prepare(
-        `SELECT series_id, title, description, mood_tag, cost_time, 
-                author, rating, publish_year, genre
-         FROM content_library 
-         ORDER BY RANDOM() 
-         LIMIT ?`
-      ).bind(need);
-      const extraResult = await extraStmt.all();
-      items = [...items, ...extraResult.results];
+    /* ========== 顶部标题 ========== */
+    .header {
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .title-block h1 {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #f472b6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+    }
+    .subtitle {
+      color: #888;
+      font-size: 16px;
+    }
+    .stats-badge {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .stats-badge .badge-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 10px 20px;
+      border-radius: 14px;
+      font-size: 14px;
+      color: #aaa;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .stats-badge .badge-item strong {
+      color: #fbbf24;
+      font-size: 22px;
+      font-weight: 700;
     }
 
-    return new Response(JSON.stringify(items), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    /* ========== 系列选择区 ========== */
+    .series-section {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 24px;
+      padding: 24px 28px;
+      margin-bottom: 28px;
+    }
+    .series-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .series-header h2 {
+      font-size: 16px;
+      color: #ccc;
+      font-weight: 500;
+    }
+    .series-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-mini {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #aaa;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-mini:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border-color: rgba(255,255,255,0.2);
+    }
+    .series-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .series-tag {
+      padding: 11px 22px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.04);
+      border: 1.5px solid rgba(255,255,255,0.08);
+      color: #aaa;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.25s ease;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .series-tag:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    .series-tag.active {
+      background: rgba(251, 191, 36, 0.15);
+      border-color: #fbbf24;
+      color: #fbbf24;
+      box-shadow: 0 0 24px rgba(251, 191, 36, 0.15);
+    }
+    .series-tag .check {
+      display: none;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .series-tag.active .check {
+      display: inline;
+    }
 
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-}
+    /* ========== 内容区 ========== */
+    .result-area {
+      min-height: 400px;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 16px;
+    }
+    .item-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 18px;
+      padding: 22px 26px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      animation: fadeUp 0.4s ease both;
+      display: flex;
+      flex-direction: column;
+    }
+    .item-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: #fbbf24;
+      transition: width 0.3s;
+    }
+    .item-card[data-series="A"]::before { background: #fbbf24; }
+    .item-card[data-series="B"]::before { background: #60a5fa; }
+    .item-card[data-series="C"]::before { background: #34d399; }
+    .item-card[data-series="D"]::before { background: #f472b6; }
+    .item-card[data-series="E"]::before { background: #a78bfa; }
+    .item-card[data-series="F"]::before { background: #fb923c; }
+    .item-card[data-series="G"]::before { background: #22d3ee; }
+    .item-card[data-series="H"]::before { background: #4ade80; }
+    .item-card[data-series="I"]::before { background: #facc15; }
+    .item-card[data-series="J"]::before { background: #f87171; }
+
+    .item-card:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+    }
+    .item-card:hover::before {
+      width: 6px;
+    }
+    .item-card .meta {
+      display: flex;
+      gap: 10px;
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .item-card .meta .series-id {
+      color: #fbbf24;
+      font-weight: 600;
+    }
+    .item-card .title {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 6px 0 8px;
+      line-height: 1.35;
+      color: #fff;
+    }
+    .item-card .desc {
+      color: #999;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-top: 6px;
+      flex-grow: 1;
+    }
+    .item-card .tags {
+      display: flex;
+      gap: 6px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .item-card .tags span {
+      background: rgba(255,255,255,0.05);
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #777;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #555;
+      padding: 100px 0;
+      font-size: 16px;
+      grid-column: 1 / -1;
+    }
+    .empty-state .icon { font-size: 56px; margin-bottom: 20px; }
+    .loading {
+      text-align: center;
+      color: #666;
+      padding: 80px 0;
+      font-size: 16px;
+      grid-column: 1 / -1;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========== 底部 ========== */
+    .footer {
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #555;
+      font-size: 14px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer .highlight { color: #fbbf24; }
+
+    /* ========== 响应式 ========== */
+    @media (max-width: 768px) {
+      body { padding: 24px 16px; }
+      .title-block h1 { font-size: 30px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .header { flex-direction: column; align-items: flex-start; }
+      .stats-badge { width: 100%; }
+      .stats-badge .badge-item { flex: 1; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 顶部标题 -->
+    <div class="header">
+      <div class="title-block">
+        <h1>✨ 灵感预览</h1>
+        <p class="subtitle">选择一个或多个领域，立即预览 5 条精选内容</p>
+      </div>
+      <div class="stats-badge">
+        <div class="badge-item"><strong id="selectedCount">0</strong>已选领域</div>
+        <div class="badge-item"><strong id="resultCount">0</strong>条内容</div>
+      </div>
+    </div>
+
+    <!-- 系列选择区 -->
+    <div class="series-section">
+      <div class="series-header">
+        <h2>🎯 选择领域（可多选）</h2>
+        <div class="series-actions">
+          <button class="btn-mini" onclick="selectAll()">全选</button>
+          <button class="btn-mini" onclick="randomPick()">随机3个</button>
+          <button class="btn-mini" onclick="clearAll()">清空</button>
+        </div>
+      </div>
+      <div class="series-grid" id="seriesGrid"></div>
+    </div>
+
+    <!-- 内容展示区 -->
+    <div class="result-area">
+      <div class="cards-grid" id="resultArea">
+        <div class="empty-state">
+          <div class="icon">👆</div>
+          <div>点击上方任意标签开始预览</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部 -->
+    <div class="footer">
+      <span>📚 内容来源 · <span class="highlight">方塘 Mindfeed</span></span>
+      <span id="footerStatus">等待选择...</span>
+    </div>
+  </div>
+
+  <script>
+    const SERIES_MAP = [
+      { id: 'A', label: '不玩手机', emoji: '📱' },
+      { id: 'B', label: '人物传记', emoji: '👤' },
+      { id: 'C', label: '创业案例', emoji: '🚀' },
+      { id: 'D', label: '经典电影', emoji: '🎬' },
+      { id: 'E', label: '必读书目', emoji: '📖' },
+      { id: 'F', label: '家常菜谱', emoji: '🍳' },
+      { id: 'G', label: '极简妙招', emoji: '🧹' },
+      { id: 'H', label: '周末去处', emoji: '🌿' },
+      { id: 'I', label: '治愈时刻', emoji: '🌅' },
+      { id: 'J', label: '搞钱知识', emoji: '💰' },
+    ];
+
+    // 快速根据 id 获取领域对象
+    const SERIES_LOOKUP = {};
+    SERIES_MAP.forEach(s => SERIES_LOOKUP[s.id] = s);
+
+    let selectedSeries = new Set();
+
+    function renderSeries() {
+      const grid = document.getElementById('seriesGrid');
+      grid.innerHTML = SERIES_MAP.map(s =>
+        `<div class="series-tag" data-series="${s.id}" onclick="toggleSeries('${s.id}')">
+          <span class="check">✓</span>
+          ${s.emoji} ${s.label}
+        </div>`
+      ).join('');
+    }
+
+    function toggleSeries(seriesId) {
+      if (selectedSeries.has(seriesId)) {
+        selectedSeries.delete(seriesId);
+      } else {
+        selectedSeries.add(seriesId);
+      }
+      updateUI();
+      loadContent();
+    }
+
+    function selectAll() {
+      SERIES_MAP.forEach(s => selectedSeries.add(s.id));
+      updateUI();
+      loadContent();
+    }
+
+    function clearAll() {
+      selectedSeries.clear();
+      updateUI();
+      document.getElementById('resultArea').innerHTML = `
+        <div class="empty-state">
+          <div class="icon">👆</div>
+          <div>点击上方任意标签开始预览</div>
+        </div>
+      `;
+      document.getElementById('resultCount').textContent = '0';
+      document.getElementById('footerStatus').textContent = '等待选择...';
+    }
+
+    function randomPick() {
+      selectedSeries.clear();
+      const shuffled = [...SERIES_MAP].sort(() => Math.random() - 0.5);
+      shuffled.slice(0, 3).forEach(s => selectedSeries.add(s.id));
+      updateUI();
+      loadContent();
+    }
+
+    function updateUI() {
+      document.querySelectorAll('.series-tag').forEach(el => {
+        el.classList.toggle('active', selectedSeries.has(el.dataset.series));
+      });
+      document.getElementById('selectedCount').textContent = selectedSeries.size;
+    }
+
+    async function loadContent() {
+      const area = document.getElementById('resultArea');
+
+      if (selectedSeries.size === 0) {
+        area.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">👆</div>
+            <div>请至少选择一个领域</div>
+          </div>
+        `;
+        document.getElementById('resultCount').textContent = '0';
+        document.getElementById('footerStatus').textContent = '等待选择...';
+        return;
+      }
+
+      area.innerHTML = `<div class="loading">正在加载精选内容...</div>`;
+      document.getElementById('footerStatus').textContent = '加载中...';
+
+      try {
+        const seriesList = Array.from(selectedSeries).join(',');
+        const resp = await fetch(`/api/preview?series=${seriesList}`);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+
+        if (data.length === 0) {
+          area.innerHTML = `
+            <div class="empty-state">
+              <div class="icon">📭</div>
+              <div>暂无内容</div>
+            </div>
+          `;
+          document.getElementById('resultCount').textContent = '0';
+          return;
+        }
+
+        area.innerHTML = data.map((item, idx) => {
+          // 根据 series_id 查对应的领域名
+          const seriesInfo = SERIES_LOOKUP[item.series_id] || { label: item.series_id, emoji: '📌' };
+
+          let metaExtra = '';
+          if (item.author) metaExtra += `<span>✍️ ${item.author}</span>`;
+          if (item.publish_year) metaExtra += `<span>📅 ${item.publish_year}</span>`;
+          if (item.rating) metaExtra += `<span>⭐ ${item.rating}</span>`;
+          if (!item.author && item.cost_time) metaExtra += `<span>⏱ ${item.cost_time}</span>`;
+          if (item.mood_tag) metaExtra += `<span>#${item.mood_tag}</span>`;
+
+          return `
+            <div class="item-card" data-series="${item.series_id}" style="animation-delay: ${idx * 0.05}s">
+              <div class="meta">
+                <span class="series-id">【${seriesInfo.label}】</span>
+                ${metaExtra}
+              </div>
+              <div class="title">${item.title}</div>
+              ${item.description ? `<div class="desc">${item.description}</div>` : ''}
+              <div class="tags">
+                <span>${seriesInfo.emoji} ${seriesInfo.label}</span>
+                ${item.genre ? `<span>${item.genre}</span>` : ''}
+                ${item.mood_tag && !item.genre ? `<span>${item.mood_tag}</span>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        document.getElementById('resultCount').textContent = data.length;
+        document.getElementById('footerStatus').textContent = `已选 ${selectedSeries.size} 个领域 · 展示 ${data.length} 条`;
+
+      } catch (err) {
+        area.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">⚠️</div>
+            <div>加载失败: ${err.message}</div>
+          </div>
+        `;
+        document.getElementById('footerStatus').textContent = '加载失败';
+        console.error('预览加载失败:', err);
+      }
+    }
+
+    renderSeries();
+    setTimeout(() => {
+      selectedSeries.add('A');
+      updateUI();
+      loadContent();
+    }, 100);
+  </script>
+</body>
+</html>
