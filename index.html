@@ -307,6 +307,7 @@
           <button class="btn-mini" onclick="selectAll()">全选</button>
           <button class="btn-mini" onclick="randomPick()">随机3个</button>
           <button class="btn-mini" onclick="clearAll()">清空</button>
+          <button class="btn-mini" onclick="resetHistory()">重置历史</button>
         </div>
       </div>
       <div class="series-grid" id="seriesGrid"></div>
@@ -340,7 +341,7 @@
       { id: 'F', label: '家常菜谱', emoji: '🍳' },
       { id: 'G', label: '极简妙招', emoji: '🧹' },
       { id: 'H', label: '周末去处', emoji: '🌿' },
-      { id: 'I', label: '治愈时刻', emoji: '🌅' },
+      { id: 'I', label: '亲子时光', emoji: '🧸' },
       { id: 'J', label: '搞钱知识', emoji: '💰' },
     ];
 
@@ -349,6 +350,31 @@
     SERIES_MAP.forEach(s => { SERIES_LOOKUP[s.id] = s; });
 
     let selectedSeries = new Set();
+
+    // ===== 去重历史 =====
+    // 记录最近看过的内容 id，请求时传给后端排除，避免每次重复
+    const MAX_HISTORY = 50;
+    let seenIds = [];
+
+    function pushSeenIds(ids) {
+      ids.forEach(id => {
+        if (id == null) return;
+        if (!seenIds.includes(id)) seenIds.push(id);
+      });
+      // 超长裁剪，保留最近的 MAX_HISTORY 条
+      if (seenIds.length > MAX_HISTORY) {
+        seenIds = seenIds.slice(-MAX_HISTORY);
+      }
+    }
+
+    function resetHistory() {
+      seenIds = [];
+      if (selectedSeries.size === 0) {
+        document.getElementById('footerStatus').textContent = '历史已重置';
+        return;
+      }
+      loadContent();
+    }
 
     function renderSeries() {
       const grid = document.getElementById('seriesGrid');
@@ -424,23 +450,35 @@
 
       try {
         const seriesList = Array.from(selectedSeries).join(',');
-        const resp = await fetch(`/api/preview?series=${seriesList}`);
+
+        // 组装请求参数，把已看过的 id 传给后端排除
+        const params = new URLSearchParams();
+        params.set('series', seriesList);
+        if (seenIds.length > 0) {
+          params.set('exclude', seenIds.join(','));
+        }
+
+        const resp = await fetch(`/api/preview?${params.toString()}`);
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const data = await resp.json();
 
-        if (data.length === 0) {
+        if (!Array.isArray(data) || data.length === 0) {
           area.innerHTML = `
             <div class="empty-state">
               <div class="icon">📭</div>
-              <div>暂无内容</div>
+              <div>暂无新的内容了，试试“重置历史”</div>
             </div>
           `;
           document.getElementById('resultCount').textContent = '0';
+          document.getElementById('footerStatus').textContent =
+            `已选 ${selectedSeries.size} 个领域 · 无新内容`;
           return;
         }
 
+        // 把本次返回的 id 记入历史
+        pushSeenIds(data.map(item => item.id));
+
         area.innerHTML = data.map((item, idx) => {
-          // 根据 series_id 查对应的领域中文名
           const seriesInfo = SERIES_LOOKUP[item.series_id] || { label: item.series_id, emoji: '📌' };
 
           let metaExtra = '';
@@ -468,7 +506,8 @@
         }).join('');
 
         document.getElementById('resultCount').textContent = data.length;
-        document.getElementById('footerStatus').textContent = `已选 ${selectedSeries.size} 个领域 · 展示 ${data.length} 条`;
+        document.getElementById('footerStatus').textContent =
+          `已选 ${selectedSeries.size} 个领域 · 展示 ${data.length} 条 · 已看过 ${seenIds.length} 条`;
 
       } catch (err) {
         area.innerHTML = `
